@@ -1,0 +1,16 @@
+% Spellchecking done with grammarly
+\section{Limitations of existing work}
+% Existing projects such as HoloClean etc
+
+Most of the existing frameworks or systems take into account either a subset of particular errors~\cite{boostclean, raha, baran, jenga}, or use syntactic data as a ground truth to then generate errors~\cite{gouda, bart}. 
+Another limitation is synthetically generated errors that are not representing real-world errors in the dataset. Existing frameworks support a subset of cleaning tasks and Data Modalities.
+For the real-world data the ground truth and errors are unknown. Moreover, many datasets are publicly not available w/ or w/o ground truth (out of date links or no source provided).
+\\
+Manual labeling~\cite{raha, baran}, hand-crafted rules/constraints~\cite{bart, gouda}, additional user inputs can also be seen as a restriction 
+since user at least is not always capable to formulate them correctly/fully. % TODO rewrite
+Additionally, existing work can be optimized by parallelizing the workflow~\cite{raha, baran, holoclean, holodetect, gouda, jenga}.
+\\
+There is no standard way of comparing data cleaning algorithms and methods for ML pipelines. 
+Currently available frameworks require an additional input to make correct decisions during the cleaning. Manual cleaning to get the ground truth is practically infeasible on scale and takes a lot of effort.
+Moreover, manual cleaning may lead to biased results if the expert knowledge is not sufficient enough.
+Thus, WashHouse standardizes the comparison and evaluation of data cleaning for ML, and aims to solve the problem of the missing ground truth or publicly not available datasets.

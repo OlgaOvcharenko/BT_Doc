@@ -1,0 +1,63 @@
+% Spellchecking done with grammarly
+\section{Data Cleaning Problems}
+% Abstract explanation which data cleaning problems exist etc (missing values, outliers etc)
+
+% Data validity problem. What, why is a problem
+The fundamental problem of the data cleaning is data validity. Data validation refers to the process of ensuring the quality of data, its fairness and accuracy. 
+Invalid, inconsistent data can bring a larger stream of issues - Garbage in , Garbage out (GIGO) concept.
+Additionally, dirty data leads to wasted resources, additional cost, monetary and time losses.
+% Exact problems - missing values, outliers & problem of automatization, how to prove that clean - HoloClean, when better to clean and when no
+\\Data cleaning can be divided into error detection and repair of inconsistencies to improve data quality.
+Errors in data appear due to:
+\begin{itemize}
+    \item heterogeneous data sources such as federated database systems or data warehouses (update anomalies on denormalized data, inconsistencies, multi-modal data)
+    \item human errors (errors made during data collection, bias, missing or default values) 
+    \item measurement or processing errors that are mostly caused by unreliable tools, hardware/software.
+\end{itemize}
+
+Common data cleaning problems are presented in \ref*{tab:dc_problems}. We differentiate between error scopes: attribute/value, observation/record, feature or between multiple features. 
+A huge effort has been made in the research community to automate both error detection and especially repairing. 
+It is not always can be guaranteed that the cleaning performed on the dataset is sufficient, and if there is no sufficient probabilistic (?) evidence that the repair is correct it is better not to fix~\cite{holoclean}. 
+Additionally, for most of the real-world datasets the ground truth is unknown and manual effort and domain knowledge are needed.\\
+Important part of the data cleaning is the principle of minimality~\cite{minimality, holoclean}. The fewer changes are introduced to the data during error repair, the less probable it is to violate integrity constraints.
+% Solutions, suggestions - checking stats etc
+\\There is a number of mechanisms / approaches to detect and fix these issues. % TODO 
+Thus, data should be analyzed, modeled, enriched, validated and debugged.
+
+
+\begin{table}
+\centering
+\begin{adjustbox}{width=1\textwidth}
+    \begin{tabular}{ |l|l|l| }
+      \hline
+      Problem & Example/Explanation\\
+      \hline
+      
+      Duplicates & Name: \emph{Jane, Smith} and \emph{Smith, Jane}\\&or DoB: \emph{11.01.1999} and \emph{Jan 11, 1999}\\
+      
+      \hline
+     Uniqueness violation & Name: \emph{Jane, Smith}, insurance number: \emph{123}\\& and name: \emph{John, Smith}, insurance number: \emph{123}\\
+      
+      \hline
+      Violation of integrity constraints & Similar to primary key (PK) - foreign key (FK)\ dependencies,\\&city: \emph{Graz} and zip: \emph{0000}\\
+      
+      \hline
+      Illegal values & DoB: \emph{77.77.7777} \\
+      
+      \hline
+      Typos & City: \emph{Lost Angeles} \\
+      
+      \hline
+      Outliers & Values that significantly differ from other observations \\
+      
+      \hline
+      Missing values & Missing cell value for the observation or default value,\\& phone number: \emph{123 456 789} \\
+      
+      \hline
+      Corruption of functional dependencies (FD)\\ or matching dependencies (MD) & Corruption of \emph{Author -> Book} dependency \\
+      \hline
+    \end{tabular}
+    
+\end{adjustbox}
+\caption{\label{tab:dc_problems} Common data cleaning problems}
+\end{table}

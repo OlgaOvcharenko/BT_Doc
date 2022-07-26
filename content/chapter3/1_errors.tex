@@ -1,0 +1,57 @@
+% Checked with grammarly
+\section{Types of Errors}
+
+% Techniques used to generate data. 
+% Now: random with replacement. 
+% Possible additional solution: using Generative Adversarial Networks (GANs).
+
+Data errors are data values in the dataset that are different from the existing ground truth. 
+Every data cell in dirty dataset that differs from the clean version is considered as a data error. 
+Data errors can be categorized by levels of their apperence in the data: single value, within a single feature, within a single tuple, within several features or tuples.
+\\
+Our error generation includes properties such as:
+\begin{itemize}
+    \item Error type: A variety of different error types can be introduced to the data.
+    \item Error rate: A configurable for each error rate, that specifies am amount of occurances of respective error.
+    \item Reproducibility: Each and every introduced error can be reproduced and tracked.
+\end{itemize}
+
+We consider eight error types that are common in the real-world datasets, they are represented in \ref{tab:errors}. 
+It is important to notice, that for functional dependencies corruption user can input text file with FDs or they can be computed if not given.
+In addition, user defined errors are supported. 
+This means that user can specify a method that follows \emph{fit} and \emph{apply} interface to specify how to introduce errors in the feature. 
+Sequences of errors to introduce can be specified by user in a JSON file, directly as a Python list, or generated randomly.
+Optionally, it can be listed in which features particular error should be generated.\\
+After each modification of the data, a binary mask with comparison of previous and current state is computed and stored. 
+In addition, changes are tracked with a global mask that is a union of all. Storing all masks for each error introduction allows to track changes and to reproduce any state.
+
+\begin{table}
+\centering
+\begin{adjustbox}{width=1\textwidth}
+    \begin{tabular}{ |c|c|c|c| }
+      \hline
+      Corruption level & Error Type & Explanation & Example\\
+
+      Single value & Missing value & cell where no value or default value is stored & 9999, NAN, INF \\
+      Typo & a typographical error & either Morroco, or Morrocco, or Morocco\\
+      
+      Feature & Outlier\cite{outlier_survey} & value significantly different from other observations & 1000 in feature with value range [0, 1] \\
+      Corrupted set of distinct values & introduce new or remove distinct values from the feature & Clean dataset distinct values: {\{A, B, C\}}, dirty: \emph{\{A, B, C, D\}}\\
+      Flip & flipped values within the feature & Relevant for such features as \emph{age}. In ECG dataset \ref{ecgkaggle}, newborn ECG can become adult ECG \\
+
+    
+      Single tuple & Swap & swap values within an observation & Often user enters data into the wrong/neighboring cell\\
+      
+      Several features & 
+      Corrupted FD & violate am existing relationship between one or more features (possibly transitively) & Corrupt \emph{City, Country -> ZIP} \\
+      Conditional error & add errors to the groups (similar to GROUP BY) & Incorrect currency for a set of cities within a country \\
+    %   User defined error & add errors that are generated via method that is given by user as an input & User defined method that outputs error value \\
+      \hline
+    \end{tabular}
+\end{adjustbox}
+\caption{\label{tab:errors} Supported error types}
+\end{table}
+
+The focus is on a single source datasets, thus multiple data source datasets and errors that occur during schema integration are not considered.
+
+%  TODO Outliers & Typos & Missing values & Replacement & Swaps

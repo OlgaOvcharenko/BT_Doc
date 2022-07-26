@@ -1,0 +1,156 @@
+\section{Data characteristics}
+
+Data characteristics, distribution and error visualization of 6 datasets:
+
+Table data characteristics
+
+Diagrams of \#nnz (sort by nnz), distinct items. 
+% TODO add references
+\begin{table}[!t]
+\caption{\label{tab:dataset_sizes}Datasets}
+\centering
+\begin{tabular}{r|l|l|l|l|l|l}
+\toprule
+ & \#rows & \#cols & Clean size {[}MB{]} & Dirty size {[}MB{]} & \#Cat & \#Numeric\\
+\midrule
+beers                & 2410     & 11     &    233 KB              & 255 KB                    & 8                    & 3                    \\
+flights              & 2376     & 7      &    173 KB              & 155 KB                    & 7                    & 0                    \\
+hospital             & 1000     & 20     &    303 KB              & 303KB                     & 20                   & 0                     \\
+movies               & 7390     & 17     &    4,4 MB              & 4,6 MB                    & 14                   & 3                    \\
+rayyan               & 1000     & 11     &    273 KB              & 273 KB                    & 9                    & 2                     \\
+tax                  & 200000   & 15     &    14,6 MB             & 14,6 MB                   & 10                   & 5                    \\
+\bottomrule    
+\end{tabular}
+\end{table}
+
+\subsection{Datasets}
+To real-world datasets are used. In Table~\ref{tab:dataset_sizes} datasets and their sizes are presented.
+% TODO variance in rows to column ratios
+% TODO string vs numeric vs categorical 
+% Why dirty is bigger?
+
+\subsection{Data characteristics}
+The main goal is to maintain the characteristics of the dirty data while generating larger datasets. 
+% TODO Why mean
+% TODO Why variance is not preserved
+% TODO Why distincts 
+% TODO Data statistics plot/ table
+
+\begin{figure}[!t]
+    \centering 
+    \centering
+\begin{subfigure}{0.4\textwidth}
+    \includegraphics[width=\textwidth]{example-image-a}
+    \caption{\label{exp:d1}Bears}
+    \label{exp:distincts_bears}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.4\textwidth}
+    \includegraphics[width=\textwidth]{example-image-a}
+    \caption{Flights}
+    \label{exp:distincts_flights}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.4\textwidth}
+    \includegraphics[width=\textwidth]{example-image-a}
+    \caption{Hospital}
+    \label{fig:distincts_hospitals}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.4\textwidth}
+    \includegraphics[width=\textwidth]{example-image-a}
+    \caption{Movies}
+    \label{exp:distincts_movies}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.4\textwidth}
+    \includegraphics[width=\textwidth]{example-image-a}
+    \caption{Rayyan}
+    \label{exp:distincts_rayyan}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.4\textwidth}
+    \includegraphics[width=\textwidth]{example-image-a}
+    \caption{Tax}
+    \label{exp:distincts_tax}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.4\textwidth}
+    \includegraphics[width=\textwidth]{example-image-a}
+    \caption{Toy}
+    \label{exp:distincts_toy}
+\end{subfigure}
+% TODO describe 
+        
+\caption{Distinct values distribution of clean and dirty datasets}
+\label{exp:distinct_values_datasets}
+\end{figure}
+Figure \ref{exp:distinct_values_datasets} shows the number of distinct values and their frequencies in each dataset. 
+
+\subsection{Error distribution}
+To preserve the error distribution in generated dataset, error characteristics of the original dirty are %TODO.
+\begin{table}[!t]
+\caption{\label{tab:dirty_num_errors}Dirty dataset error characteristics}
+\begin{tabular}{r|l|l|l|l|l}
+\toprule
+& Outliers & Typos & Missing values & Replacement & Swaps \\ \midrule
+beers                &          &       &                &                  &       \\
+flights              &          &       &                &                  &       \\
+hospital             &          &       &                &                  &       \\
+movies               &          &       &                &                  &       \\
+rayyan               &          &       &                &                  &       \\
+tax                  &          &       &                &                  &       \\
+toy                  &          &       &                &                  &       \\ \bottomrule
+\end{tabular}
+\end{table}
+% TODO Replacement vs Flipped category vs Flipped value
+In Table \ref{tab:dirty_num_errors} number of errors in every dataset.
+
+% TODO Each column which type of error is present in which column.
+\begin{figure}[!t]
+    \centering 
+    \centering
+\begin{subfigure}{0.4\textwidth}
+    \includegraphics[width=\textwidth]{example-image-a}
+    \caption{\label{exp:d1}Bears}
+    \label{exp:barplot_error_count_bears}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.4\textwidth}
+    \includegraphics[width=\textwidth]{example-image-a}
+    \caption{Flights}
+    \label{exp:barplot_error_count_flights}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.4\textwidth}
+    \includegraphics[width=\textwidth]{example-image-a}
+    \caption{Hospital}
+    \label{fig:barplot_error_count_hospital}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.4\textwidth}
+    \includegraphics[width=\textwidth]{example-image-a}
+    \caption{Movies}
+    \label{exp:barplot_error_count_movies}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.4\textwidth}
+    \includegraphics[width=\textwidth]{example-image-a}
+    \caption{Rayyan}
+    \label{exp:barplot_error_count_rayyan}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.4\textwidth}
+    \includegraphics[width=\textwidth]{example-image-a}
+    \caption{Tax}
+    \label{exp:distincts_tax}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.4\textwidth}
+    \includegraphics[width=\textwidth]{example-image-a}
+    \caption{Toy}
+    \label{exp:barplot_error_count_toy}
+\end{subfigure}
+\caption{Number of errors in each dataset}
+\label{exp:barplot_error_counts_datasets}
+\end{figure}
