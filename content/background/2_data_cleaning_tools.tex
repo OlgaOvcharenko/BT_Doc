@@ -1,30 +1,26 @@
 % Spellchecking done with grammarly
-\section{Existing Work}
+\section{Data Cleaning Tools}
 % Existing projects such as HoloClean etc
 A huge effort has been made in the research community to automate data cleaning and validation. 
 Many researchers have injected errors into the data with ground truth to experiment and evaluate their cleaning pipelines, frameworks etc.
-In this section existing frameworks, their differences, benefits and disadvantages are discussed.
-
+In this section existing frameworks, their differences, benefits and disadvantages are discussed.\\\\
 % - [ ] HoloClean / HoloDetect / Picket %  TODO
 % FDs, denial constraints: Any measurements where to introduce errors like HoloClean / Picket? Instead of just randomly.
 In many cases error detection is limited to a specific side effects of erogenous data (e.g., duplicates, integrity constraints violation), and data repairing methods are not introducing correct repairs~\cite{holoclean}. 
 HoloClean~\cite{holoclean}, a framework for holistic data repairing driven by probabilistic inference, introduces an approach for combining heterogeneous data cleaning methods.
 It generates a probabilistic graphical model that uses input denial constraints and matching dependencies, capturing the uncertainty over observations in the input dataset, and then uses probabilistic inference to reason about inconsistencies and repair them with most likely values. 
-HoloDetect~\cite{holodetect} is a framework for the error detection. Correct and erogenous observations are generated with data augmentation and few-shot learning, and then used as an input to a classifier whether value is an error.
-
+HoloDetect~\cite{holodetect} is a framework for the error detection. Correct and erogenous observations are generated with data augmentation and few-shot learning, and then used as an input to a classifier whether value is an error.\\\\
 % - [ ] Raha/Baran 
 Another error detection system is Raha~\cite{raha}, and following error correction system - Baran~\cite{baran}. Errors are detected and corrected with ML ensemble of existing algorithms, rules and constraints.
 In comparison to WashHouse, user needs to label clusters of noisy data (each cluster represents implicit type of data errors). User labels are used then to classify dirty and clean values. 
-The main limitation of Raha/Baran is that the user label propagation is required for the classifier, and also requires a run of many algorithms/configurations what can be very extensive and with pruning does not guarantee the best performance.\\
+The main limitation of Raha/Baran is that the user label propagation is required for the classifier, and also requires a run of many algorithms/configurations what can be very extensive and with pruning does not guarantee the best performance.\\\\
 % - [ ] ActiveClean FIXME is really necessary?
 According to the Sympson's Paradox~\cite{activeclean}, any subset of a dataset is not guaranteed to represent the whole dataset.
 This means that sample distribution is not always enough to judge about the distribution of the whole data. 
 ActiveClean~\cite{activeclean}, a model training framework that allows cleaning for iterative data while preserving monotone convergence guarantee, suggests samples of data to clean based on the likelihood it is dirty. 
 % - [ ] BoostClean
 BoostClean~\cite{boostclean} automatically selects a from a defined number of cleaning methods, and chooses repairs that are likely to affect the model and show an improvement in accuracy. 
-But ActiveClean concentrates on the repair of the specific error types such as domain values violations.\\
-
-
+But ActiveClean concentrates on the repair of the specific error types such as domain values violations.\\\\
 % - [ ] Jenga
 % 	No distributed. 
 % 	Not scaling systematically.
@@ -32,8 +28,7 @@ But ActiveClean concentrates on the repair of the specific error types such as d
 During data preparation new errors can be introduced unintentionally, e.g. without domain knowledge missing values in feature with a person's age can be replaced with zeroes what leads to misbehaviour of the ML model.
 Jenga~\cite{jenga} is an open source experimentation library that allows to test ML models for robustness against common data errors (e.g., missing values, swapped values, noise) observed in production scenarios.
 It takes raw input data and randomly introduces certain data errors to then evaluate the given as an input ML model. Jenga gives an opportunity to study an impact of introduced errors on the dataset and model prediction respectively.\\
-Jenga uses ML approach (predict - corrupt - evaluate) to validate data and to check the influence of errors, while in WashHouse generated data is validated by checking feature univariate statistics, distinct items and dependencies between features. 
-
+Jenga uses ML approach (predict - corrupt - evaluate) to validate data and to check the influence of errors, while in WashHouse generated data is validated by checking feature univariate statistics, distinct items and dependencies between features.\\\\
 % - [ ] Gouda
 % 	No distributed, purely synthetic schema generated from JSON with denial constrains. No real world datasets. No statistical checks or comparison after the generation. 
 % 	Constraints categories: redundancy about an entity, inconsistence about an entity
@@ -43,31 +38,26 @@ GouDa~\cite{gouda} is a tool for the automated generation of datasets with possi
 GouDa consists of two steps: data and error generation.
 Data generator (part of EvoBench project~\cite{evobench}) takes schema and feature value ranges as an input and outputs purely synthetic dataset based on them. 
 Error generator introduces variety of error types at configurable error rate at a single value, attribute, tuple and several tuples levels. Since the data is fully synthetic and generator's input are schema and constraints, ground truth is provided. 
-In comparison to GouDa, where datasets are purely synthetic, WashHouse generates data from real-world datasets via data augmentation (?), thus preserving errors and their distributions. 
+In comparison to GouDa, where datasets are purely synthetic, our data generator uses real-world datasets, thus error and data distributions are preserved. 
 Additionally, in contrast to GouDa and Jenga, WashHouse supports distributed data and error generation.\\
-
-% - [ ] BART TODO is enough?
-% 	Requires relational schema
 Conversely to GouDa, BART~\cite{bart} needs an existing data and inserts errors into the actual dataset that is assumed to be clean. It requires relational schema, user specifies
 a set of data quality rules as denial constraints~\cite{denialconst} (functional dependencies (FD), cleaning equality-generating dependencies, fixing rules~\cite{fixingrules}). 
-User can specify error rates similar to the WashHouse, but also how detectable and repairable introduced errors are given constraints.\\
-
+User can specify error rates similar to the WashHouse, but also how detectable and repairable introduced errors are given constraints.\\\\
 % - [ ] AlphaClean
 % - [ ] BoostClean
 % - [ ] ActiveClean
-
 % - [ ] Sorting Hat
 % - [ ] Snorkel 
 % - [ ] CPClean
 % - [ ] Shafaq’s paper - enumerating cleaning pipelines, scale up error distribution
-
 % - [ ] CleanML TODO
-
-Most of the mentioned above systems can be optimized by parallelizing the workflow~\cite{raha, baran, holoclean, holodetect, gouda, jenga}, this can be seen as a limitation comparing to the WashHouse.
-Another constraint in existing frameworks are hand-crafted rules/constraints or user manual labeling, while WashHouse takes as an input the data only.
-Importantly, it is difficult to measure the accuracies of the above mentioned tools without ground truth and mostly existing frameworks use manually cleaned datasets, what is not feasible on scale.
+Most of the mentioned above systems can be optimized by parallelizing the workflow~\cite{raha, baran, holoclean, holodetect, gouda, jenga}, this can be seen as a limitation.
+Another constraint in existing frameworks are hand-crafted rules/constraints or user manual labeling.
+Importantly, it is difficult to measure the accuracy of the above mentioned tools without ground truth and mostly existing frameworks use manually cleaned datasets, what is not feasible on scale.
 % Unknown ground truth and synthetically generated errors are the problem
-Thus, WashHouse solves the dilemma of finding ground truth and could provide support for tools that process scalable data. 
+\\\\
+Our data generator solves the dilemma of finding ground truth. Errors are generated not syntactically, but are based on the original data and error distribution.
+Moreover, data can be generated either local or in distributed setting.
 
 % #1 Unknown Ground Truth / Synthetically Generated Errors 
 % #2 Fixed, Partially-unavailable Datasets
@@ -75,4 +65,3 @@ Thus, WashHouse solves the dilemma of finding ground truth and could provide sup
 % #4 Hand-crafted Rules/Constraints
 % #5 Subset of Cleaning Tasks and Data Modalities
 % #6 Unaware of Downstream ML Applications / Analytics
-

@@ -40,46 +40,41 @@ The main goal is to maintain the characteristics of the dirty data while generat
     \centering 
     \centering
 \begin{subfigure}{0.4\textwidth}
-    \includegraphics[width=\textwidth]{example-image-a}
+    \includegraphics[width=\textwidth]{figures/plot/distinct/beers_distinct/combined.pdf}
     \caption{\label{exp:d1}Bears}
     \label{exp:distincts_bears}
 \end{subfigure}
 \hfill
 \begin{subfigure}{0.4\textwidth}
-    \includegraphics[width=\textwidth]{example-image-a}
+    \includegraphics[width=\textwidth]{figures/plot/distinct/flights_distinct/combined.pdf}
     \caption{Flights}
     \label{exp:distincts_flights}
 \end{subfigure}
 \hfill
 \begin{subfigure}{0.4\textwidth}
-    \includegraphics[width=\textwidth]{example-image-a}
+    \includegraphics[width=\textwidth]{figures/plot/distinct/hospital_distinct/combined.pdf}
     \caption{Hospital}
     \label{fig:distincts_hospitals}
 \end{subfigure}
 \hfill
 \begin{subfigure}{0.4\textwidth}
-    \includegraphics[width=\textwidth]{example-image-a}
+    \includegraphics[width=\textwidth]{figures/plot/distinct/movies_distinct/combined.pdf}
     \caption{Movies}
     \label{exp:distincts_movies}
 \end{subfigure}
 \hfill
 \begin{subfigure}{0.4\textwidth}
-    \includegraphics[width=\textwidth]{example-image-a}
+    \includegraphics[width=\textwidth]{figures/plot/distinct/rayyan_distinct/combined.pdf}
     \caption{Rayyan}
     \label{exp:distincts_rayyan}
 \end{subfigure}
 \hfill
 \begin{subfigure}{0.4\textwidth}
-    \includegraphics[width=\textwidth]{example-image-a}
+    \includegraphics[width=\textwidth]{figures/plot/distinct/tax_distinct/combined.pdf}
     \caption{Tax}
     \label{exp:distincts_tax}
 \end{subfigure}
 \hfill
-\begin{subfigure}{0.4\textwidth}
-    \includegraphics[width=\textwidth]{example-image-a}
-    \caption{Toy}
-    \label{exp:distincts_toy}
-\end{subfigure}
 % TODO describe 
         
 \caption{Distinct values distribution of clean and dirty datasets}
@@ -93,14 +88,13 @@ To preserve the error distribution in generated dataset, error characteristics o
 \caption{\label{tab:dirty_num_errors}Dirty dataset error characteristics}
 \begin{tabular}{r|l|l|l|l|l}
 \toprule
-& Outliers & Typos & Missing values & Replacement & Swaps \\ \midrule
-beers                &          &       &                &                  &       \\
-flights              &          &       &                &                  &       \\
-hospital             &          &       &                &                  &       \\
-movies               &          &       &                &                  &       \\
-rayyan               &          &       &                &                  &       \\
-tax                  &          &       &                &                  &       \\
-toy                  &          &       &                &                  &       \\ \bottomrule
+                     & Outliers & Typos & Missing values & Replacement & Swaps \\ \midrule
+beers                & 0        & 254   & 4170           & 0                & 0       \\
+flights              & 0        & 2243  & 0              & 0                & 314     \\
+hospital             & 0        & 417   & 92             & 0                & 0       \\
+movies               & 0        & 982   & 6346           & 141              & 0       \\
+rayyan               & 0        & 649   & 75             & 224              & 0       \\
+tax                  & 2        & 1367  & 588            & 1200             & 4       \\ \bottomrule
 \end{tabular}
 \end{table}
 % TODO Replacement vs Flipped category vs Flipped value

@@ -1,57 +1,70 @@
 % Checked with grammarly
 \section{Types of Errors}
+\label{sec:error_types}
 
-% Techniques used to generate data. 
-% Now: random with replacement. 
-% Possible additional solution: using Generative Adversarial Networks (GANs).
+Data errors are values that differ from the ground truth.
+In this context, we differentiate between data with and without errors by calling it clean or dirty. 
+Completely clean data is ground truth (GT).  
 
-Data errors are data values in the dataset that are different from the existing ground truth. 
-Every data cell in dirty dataset that differs from the clean version is considered as a data error. 
-Data errors can be categorized by levels of their apperence in the data: single value, within a single feature, within a single tuple, within several features or tuples.
-\\
-Our error generation includes properties such as:
-\begin{itemize}
-    \item Error type: A variety of different error types can be introduced to the data.
-    \item Error rate: A configurable for each error rate, that specifies am amount of occurances of respective error.
-    \item Reproducibility: Each and every introduced error can be reproduced and tracked.
-\end{itemize}
 
-We consider eight error types that are common in the real-world datasets, they are represented in \ref{tab:errors}. 
-It is important to notice, that for functional dependencies corruption user can input text file with FDs or they can be computed if not given.
-In addition, user defined errors are supported. 
-This means that user can specify a method that follows \emph{fit} and \emph{apply} interface to specify how to introduce errors in the feature. 
-Sequences of errors to introduce can be specified by user in a JSON file, directly as a Python list, or generated randomly.
-Optionally, it can be listed in which features particular error should be generated.\\
-After each modification of the data, a binary mask with comparison of previous and current state is computed and stored. 
-In addition, changes are tracked with a global mask that is a union of all. Storing all masks for each error introduction allows to track changes and to reproduce any state.
+In the context of this benchmark, we have a clean ground-truth dataset and a dirty version with introduced errors.  
+Leveraging this, faulty values can be found by locating the cells that differ between dirty and clean. 
+This information is helpful to detect errors and their distribution, and frequencies of specific values being error prone.  
+Moreover, it is useful for classification of error types.
 
-\begin{table}
-\centering
-\begin{adjustbox}{width=1\textwidth}
-    \begin{tabular}{ |c|c|c|c| }
-      \hline
-      Corruption level & Error Type & Explanation & Example\\
 
-      Single value & Missing value & cell where no value or default value is stored & 9999, NAN, INF \\
-      Typo & a typographical error & either Morroco, or Morrocco, or Morocco\\
-      
-      Feature & Outlier\cite{outlier_survey} & value significantly different from other observations & 1000 in feature with value range [0, 1] \\
-      Corrupted set of distinct values & introduce new or remove distinct values from the feature & Clean dataset distinct values: {\{A, B, C\}}, dirty: \emph{\{A, B, C, D\}}\\
-      Flip & flipped values within the feature & Relevant for such features as \emph{age}. In ECG dataset \ref{ecgkaggle}, newborn ECG can become adult ECG \\
+\textbf{Five error types}, that are common in the real-world datasets, are considered in this benchmark: 
+Missing values, typos, outliers, replacements and swaps. 
+The error types and descriptions are shown in Table~\ref{tab:generator_errors}.
 
-    
-      Single tuple & Swap & swap values within an observation & Often user enters data into the wrong/neighboring cell\\
-      
-      Several features & 
-      Corrupted FD & violate am existing relationship between one or more features (possibly transitively) & Corrupt \emph{City, Country -> ZIP} \\
-      Conditional error & add errors to the groups (similar to GROUP BY) & Incorrect currency for a set of cities within a country \\
-    %   User defined error & add errors that are generated via method that is given by user as an input & User defined method that outputs error value \\
-      \hline
-    \end{tabular}
-\end{adjustbox}
-\caption{\label{tab:errors} Supported error types}
-\end{table}
+
+\textbf{Missing value} is the simplest type of error that is frequently seen in our experimentation. 
+There are three sub categories of missing values: 
+Missing completely at random (MCAR), missing at random (MAR), missing not at random (MNAR). 
+MCAR is a value that is missing completely independently. 
+MAR occurs when the missingness is not random, but where it can be fully accounted for by variables where there is complete information. 
+MNAR means that the missingness of an observation depends on its values. MNAR analysis is problematic because the distribution of the missing observations depends on both observed values and unobserved values.
+The benchmark supports MCAR and MAR.
+
+
+\textbf{Typo}
+
+
+\textbf{Outlier}
+
+\textbf{Replacement} is a flipped value that was chosen from the existing set of valid value. For example, in feature with distinct set of values \emph{\{A, B, C\}}, \emph{A} can be replaced by \emph{D}. 
+
+
+\textbf{Swap} is a pair of values swapped between two columns: numerical and categorical, categorical and categorical or two categorical.
+
+
+
+
 
 The focus is on a single source datasets, thus multiple data source datasets and errors that occur during schema integration are not considered.
 
-%  TODO Outliers & Typos & Missing values & Replacement & Swaps
+
+Data errors can be categorized by levels of their appearance in the data: single value, within a single feature, within a single tuple, within several features or tuples.
+
+% Our error generation includes properties such as:
+% \begin{itemize}
+%     \item Error type: A variety of different error types can be introduced to the data.
+%     \item Error rate: A configurable for each error rate, that specifies am amount of occurances of respective error.
+%     \item Reproducibility: Each and every introduced error can be reproduced and tracked.
+% \end{itemize}
+
+
+% \begin{table}[!h]
+% \caption{\label{tab:generator_errors}Errors preserved by generator}
+% \begin{tabular}{l|l|l}
+% \toprule
+% Error name    & Parameters                                                                                                             & Description                                                                           \\ 
+% \midrule
+% Missing value & \begin{tabular}[c]{@{}l@{}}text text text text text text \\ text text text text text text\end{tabular} & \begin{tabular}[c]{@{}l@{}}text text text text text text \\ text text text text text text\end{tabular} \\
+% Typo          &\begin{tabular}[c]{@{}l@{}}text text text text text text \\ text text text text text text\end{tabular} & \begin{tabular}[c]{@{}l@{}}text text text text text text \\ text text text text text text\end{tabular} \\
+% Outlier       &\begin{tabular}[c]{@{}l@{}}text text text text text text \\ text text text text text text\end{tabular} & \begin{tabular}[c]{@{}l@{}}text text text text text text \\ text text text text text text\end{tabular} \\
+% Replacement   &\begin{tabular}[c]{@{}l@{}}text text text text text text \\ text text text text text text\end{tabular} & \begin{tabular}[c]{@{}l@{}}text text text text text text \\ text text text text text text\end{tabular} \\
+% Swap          &\begin{tabular}[c]{@{}l@{}}text text text text text text \\ text text text text text text\end{tabular} & \begin{tabular}[c]{@{}l@{}}text text text text text text \\ text text text text text text\end{tabular} \\
+% \bottomrule
+% \end{tabular}
+% \end{table}
