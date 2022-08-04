@@ -1,0 +1,54 @@
+\tikzset{bb/.style={draw, inner sep=2.5mm, rounded corners}}
+\tikzset{
+    ultra thin/.style= {line width=0.1pt},
+    very thin/.style=  {line width=0.2pt},
+    thin/.style=       {line width=0.4pt},
+    semithick/.style=  {line width=0.6pt},
+    thick/.style=      {line width=0.8pt},
+    very thick/.style= {line width=1.2pt},
+    ultra thick/.style={line width=1.6pt}
+}
+
+\begin{figure}
+    \centering
+    
+    \begin{tikzpicture}[]
+    \node[bb, text width=13.3cm, align = center, fill=black!10](disk){Disk};
+    
+    \node[bb, anchor = west, fill=blue!30] (clean) at ([yshift=-1.5cm, xshift = 1cm] disk.west) {Clean data};
+    \node[bb, anchor = west, fill=red!30] (dirty) at ([yshift=-3cm, xshift = 1cm] disk.west) {Dirty data};
+    
+    \node[bb, text width=3.6cm, fill=green!10] (stats) at ([yshift=-3.0cm, xshift = -0.8cm] disk) {Statistics and error distributions};
+    
+    \node[bb, fill=blue!30] (scale_up) at ([yshift=-1.5cm, xshift = -0.5cm] disk) {Scale up clean};
+    
+    \node[bb, fill=red!30, text width=4.0cm, anchor = east] (errors) at ([yshift=-1.7cm,xshift= -0.8cm] disk.east) {Errors generation and introduction};
+    
+    \node[bb,  anchor=east, fill=green!10] (validation) at ([yshift=-3.1cm, xshift=-1cm] disk.east) {Validation};
+    
+    \draw[->] ([xshift=0.4cm]disk.south west) to[out = -90, in = 180] (clean);
+    \draw[->] ([xshift=0.2cm]disk.south west) to[out = -90, in = 180] (dirty);
+    
+    \draw[->] ([]clean.east) to[out = 0, in = 180] (scale_up);
+    
+    \draw[->] ([yshift=-0.2cm]clean.east) to[out = 0, in = 180] ([yshift=0.2cm] stats.west);
+    
+    \draw[->] ([]dirty.east) to[out = 0, in = 180] (stats);
+    
+    \draw[->] ([]scale_up.east) to[out = 0, in = 180] (errors);
+    
+    \draw[->] ([]stats.east) to[out = 0, in = -90] ([xshift=0.2cm]errors.south west);
+    
+    \draw[->] ([]errors.east) to[out = 30, in = -90] ([xshift=-0.5cm]disk.south east);
+    
+    \draw[->] ([]validation.east) to[out = 0, in = -90] ([xshift=-0.3cm]disk.south east);
+    
+    \draw[->] ([xshift=-0.8cm]errors.south) to[out = -90, in = 180] ([]validation.west);
+    
+    \draw[->] ([yshift=-0.2cm]stats.east) to[out = 0, in = 180] ([yshift=-0.2cm]validation.west);
+    
+    \end{tikzpicture}
+    
+    \caption{Local data generator}
+    \label{fig:data_gen_local}
+\end{figure}

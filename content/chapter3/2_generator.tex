@@ -1,16 +1,24 @@
-% Checked with grammarly
 \section{Data Generation Framework}
 \label{sec:data_gen}
-% Descroption of overall framework.
-% Describe transformations that are introduces.
-% Currently, following transformations are implemented: swaps between columns, corrupt functional dependencies, modify by distinct values or add new distinct values randomly, add outliers by shifting the delimiter, adding missing values or from IQR, adding typos. Also, conditional were added (similar to the GROUP BY) and user defined errors, such that user can parse puthon file with functions to apply on columns.
-% There are 2 ways to add transformation: from json, or direcly specify Python list of dictionaries for each transformation.
+For this framework we introduced two implementations to generate scaled up datasets: Local and distributed.
+Both implementations maintain data and error statistics. 
+The framework contains full pipelines consisting of the following generalized steps:
 
-Data generator is implemented as a separate Python class. New observations are generated from the input dataset. 
-Indices of observations/rows to copy are generated as a random sample with replacement, and then used to slice the data.
-Data object stores original input data and a new scaled part. User inputs the scaling factor (less 1 - slice of the input dataset, 1 - input dataset, greater 1 - scale).
+\begin{itemize}
+    \item read clean and dirty data
+    \item data analysis and error classification
+    \item scale up clean data
+    \item generate errors and introduce to clean 
+    \item save generated dirty dataset
+    \item generated data analysis
+\end{itemize}
 
-% FIXME
-There is a distributed setting for the data generator. It is executed via Apache Spark RDDs. 
-Full dataset is broadcasted and then scaled. One partition is 1K block (1024 bytes).
-User can choose between local and distributed setting. All transformations and errors are generated after the input data is scaled, such that size of data is known while generating the errors.
+\subsection{Local}
+\label{sec:local_generator}
+\input{content/chapter3/fig_local_gen}
+
+
+\subsection{Distributed}
+\label{sec:distributed_generator}
+
+\input{content/chapter3/fig_distributed_gen}
