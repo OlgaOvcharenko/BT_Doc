@@ -8,33 +8,33 @@
 % schema
 % masking
 
-To validate the data and to evaluate error generation a number statistics is computed before and after the data generation:
-% TODO maybe table with stat and rule 
-\begin{itemize}
-    \item shape. 
-    \item distinct values.
-    \item functional dependencies.
-    \item outliers.
-    \item missing values.
-    \item min, max and mode
-    \item mean and variance.
-    \item skewness and curtosis.
-\end{itemize}
+% To validate the data and to evaluate error generation a number statistics is computed before and after the data generation:
+% % TODO maybe table with stat and rule 
+% \begin{itemize}
+%     \item shape. 
+%     \item distinct values.
+%     \item functional dependencies.
+%     \item outliers.
+%     \item missing values.
+%     \item min, max and mode
+%     \item mean and variance.
+%     \item skewness and curtosis.
+% \end{itemize}
 
-Dimensions and shape of the scaled erroneous data should correspond the original data and the scaling factor. 
-Similarly, disctinct values remain the same unless they were corrupted for induvidual features.
-Functional dependencies can be either given as an input, or discovered from the data. Importantly, after the scaling FDs should remain the same. Only after FDs corruption error, FDs change.
-Outliers are computed by interquartile range (IQR) and are tracked with masks. Observation/row should have the same outlier mask before and after scaling since data is scaled by random sampling.
-Missing values are traced similarly to the outliers. If cell contained a missing value before scaling or error generation, it should also contain it after.
-\\
-Data ranges are assumed to be same after scaling, but this property doesn't hold after the error generation. 
-Mean, variance, skewness and curtosis should fluctuate within 20\%. 
-This means that if originally feature was approximately symmetric (skeweness between -0.5 and 0.5), the skeweness of the symmetric should be within [-0.7, 0.7] interval.
-\\
-For easier error introduction and to assure that the feature type constraints are not violated, the schema of the original data is detected and preserved.
-Schema detection is implemented by sampling the input dataset and extracting basic data types (e.g., integer, float, string). 
-\\
-To trace changes during the error introduction masks are computed as described in Chapter 3. Additionally, statistics of scaled data are modified.
-% TODO 
-\\In distributed setting, distinct values and other statistics are computed before partitioning. 
+% Dimensions and shape of the scaled erroneous data should correspond the original data and the scaling factor. 
+% Similarly, disctinct values remain the same unless they were corrupted for induvidual features.
+% Functional dependencies can be either given as an input, or discovered from the data. Importantly, after the scaling FDs should remain the same. Only after FDs corruption error, FDs change.
+% Outliers are computed by interquartile range (IQR) and are tracked with masks. Observation/row should have the same outlier mask before and after scaling since data is scaled by random sampling.
+% Missing values are traced similarly to the outliers. If cell contained a missing value before scaling or error generation, it should also contain it after.
+% \\
+% Data ranges are assumed to be same after scaling, but this property doesn't hold after the error generation. 
+% Mean, variance, skewness and curtosis should fluctuate within 20\%. 
+% This means that if originally feature was approximately symmetric (skeweness between -0.5 and 0.5), the skeweness of the symmetric should be within [-0.7, 0.7] interval.
+% \\
+% For easier error introduction and to assure that the feature type constraints are not violated, the schema of the original data is detected and preserved.
+% Schema detection is implemented by sampling the input dataset and extracting basic data types (e.g., integer, float, string). 
+% \\
+% To trace changes during the error introduction masks are computed as described in Chapter 3. Additionally, statistics of scaled data are modified.
+% % TODO 
+% \\In distributed setting, distinct values and other statistics are computed before partitioning. 
 

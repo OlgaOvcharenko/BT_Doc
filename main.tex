@@ -190,6 +190,12 @@
 
 \newcommand{\myLaT}{\LaTeX{}@TUG\xspace} %% LaTeX@TUG text "logo"
 
+\newcolumntype{K}{>{\raggedleft\arraybackslash$}p{1.5cm}<{$}}
+\newcolumntype{H}{>{\raggedleft\arraybackslash$}p{1.cm}<{$}}
+\newcommand{\colCenter}[1]{\multicolumn{1}{c|}{\textbf{#1}}}
+\newcommand{\colCenterNoRight}[1]{\multicolumn{1}{c}{\textbf{#1}}}
+
+
 \hyphenation{ex-am-ple hy-phen-ate}  %% in order to use German umlauts
 %% here (Ver-\"of-fent-li-chung), you have to check for
 %% activated \usepackage[T1]{fontenc} in the preamble
