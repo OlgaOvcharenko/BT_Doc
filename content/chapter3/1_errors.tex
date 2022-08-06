@@ -5,17 +5,13 @@
 Data errors are values that differ from the ground truth.
 In this context, we differentiate between data with and without errors by calling it clean or dirty. 
 Completely clean data is ground truth (GT).  
-
-
 In the context of this benchmark, we have a clean ground-truth dataset and a dirty version with introduced errors.  
 Leveraging this, faulty values can be found by locating the cells that differ between dirty and clean. 
 This information is helpful to detect errors and their distribution, and frequencies of specific values being error prone.  
 Moreover, it is useful for classification of error types.
 
 
-\textbf{Five error types}, that are common in the real-world datasets, are considered in this benchmark: 
-Missing values, typos, outliers, replacements and swaps. 
-The error types and descriptions are shown in Table~\ref{tab:generator_errors}.
+\textbf{The five error types} chosen are common in the real-world datasets. They include missing values, typos, outliers, replacements and swaps. 
 
 
 \textbf{Missing value} is the simplest type of error that is frequently seen in our experimentation. 
@@ -50,7 +46,8 @@ In our benchmark we are introducing outliers while preserving dirty data statist
 New outlier values are created using the correction, in Equation~\ref{eq:outlier_correction}. 
 Correction is used to shift actual mean of the scaled data to the desired mean of the dirty data.
 Correction increases interquartile range.
-To introduce outliers preserving the statistics, every new outlier should be balanced by another outlier. Thus, outliers are created in pairs of values that balance the outliers. The balanced values are reflected around mean.  
+To introduce outliers preserving the statistics, every new outlier should be balanced by another outlier. Thus, outliers are created in pairs of values that balance the outliers. 
+In essence the balanced outlier values utilize the concept of reflection symmetry around mean.  
 We generate initial outliers using interquartile range, shifting delimiter, distribution, or minimum and maximum.
 \begin{equation}
 \label{eq:outlier_correction}
@@ -61,7 +58,7 @@ We generate initial outliers using interquartile range, shifting delimiter, dist
 For example, in feature with distinct set of values \textsc{\{A, B, C\}}, \textsc{A} can be replaced by \textsc{D}. 
 Replacement does not introduce new distinct values, but change the frequencies of the different distinct values. 
 It reduces statistical power of the dirty dataset and moves it's statistical properties further from ground truth.
-In the benchmark, to preserve statistical properties, correspondence pairs of replacements and their frequencies are detected, and scaled randomly. 
+In the benchmark, correspondence pairs of replacements and their frequencies are detected, and scaled accordingly. 
 
 
 \textbf{Swap} is an exchange of pair of values within a tuple. 
@@ -72,14 +69,9 @@ In the benchmark, swaps are generated based on their distribution in the dirty d
 
 \textbf{Single source datasets} are used to introduce errors. 
 Thus, multiple source datasets and errors that occur during schema integration are not considered in the framework.
-The error generation includes properties such as:
-\begin{itemize}
-    \item Error type: Five error types can be introduced to the data.
-    \item Error distribution: Respective error is reproduced in the scaled dataset according to the dirty data error distribution.
-    \item Reproducibility: Each and every introduced error can be reproduced and tracked.
-\end{itemize}
+The error generation includes properties such as error distribution and reproducibility. Respective errors are introduced to the scaled dataset according to the dirty data error distribution. The whole data generation is seeded, and errors origin can be tracked.
 
-% TODO bias
+
 \textbf{Bias} in the data generation is unavoidable, especially under the constraints of preserving data distribution, statistics, and error fractions. 
 Missing values are introduced at random. This leads to potential replacing of never missing values in original data.
 Moreover, for small scales (e.g., 2x) this random application can effect statistics significantly, such as mean.
@@ -88,6 +80,3 @@ Outliers are biased by the statistics that the introduction of outliers tries to
 Additionally, similar to missing values, outliers are introduced at random.
 Replacements and swaps are not biased and reproduce the original dirty data via the counts of the specific swaps/replacements of 'a' and 'b'.
 Both these types do not introduce new values and only modify existing dirty-clean pairs seen in the original dataset.
-% % TODO in-estimation
-% \textbf{In-estimation} 
-% How we estimate what to introduce.

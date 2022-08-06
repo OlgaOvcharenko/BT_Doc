@@ -2,39 +2,24 @@
 \section{Validation of Results}
 \label{sec:validation}
 % To check results after generation such statistics as min, max, mean, variance, skew are compared. Additionally, missing values,  distinct values and outliers are checked. 
-% To have history of modifications, after every transformation binary mask is stored and can be loaded if needed. Super mask with all modified cells is picked during the run time.
+After the generation, the new dataset is validated to analyze and check if statistics are preserved. 
+The data and error characteristics of the freshly generated dataset are compared against characteristics of the original dirty dataset.
+The following soft constraints are used to validate the generated dataset:
+\begin{itemize}
+    \item The mean difference of the generated and the original dirty datasets should be within 10\%.
+    \item The generated dataset's quantiles should be within 
+    \item[~]$[Q_{dirty}(0.25) - 1.5\cdot IQR, Q_{dirty}(0.75) + 1.5\cdot IQR]$.
+    \item Min and max are compared, and should be equivalent.
+    \item The number of distinct values in generated dataset and estimated number~\ref{eq:distincts} should be within 5\%.
+    \item The number of generated missing values, outliers, typos, replacements, and swaps differentiates by maximum  of 10\% from the original dirty numbers multiplied with the scaling factor.
+    \item The number of unique values for each error is compared to the estimated, similar to the number of distinct items above.
+\end{itemize}
 
-% univar statistics
-% schema
-% masking
-
-% To validate the data and to evaluate error generation a number statistics is computed before and after the data generation:
-% % TODO maybe table with stat and rule 
-% \begin{itemize}
-%     \item shape. 
-%     \item distinct values.
-%     \item functional dependencies.
-%     \item outliers.
-%     \item missing values.
-%     \item min, max and mode
-%     \item mean and variance.
-%     \item skewness and curtosis.
-% \end{itemize}
-
-% Dimensions and shape of the scaled erroneous data should correspond the original data and the scaling factor. 
-% Similarly, disctinct values remain the same unless they were corrupted for induvidual features.
-% Functional dependencies can be either given as an input, or discovered from the data. Importantly, after the scaling FDs should remain the same. Only after FDs corruption error, FDs change.
-% Outliers are computed by interquartile range (IQR) and are tracked with masks. Observation/row should have the same outlier mask before and after scaling since data is scaled by random sampling.
-% Missing values are traced similarly to the outliers. If cell contained a missing value before scaling or error generation, it should also contain it after.
-% \\
-% Data ranges are assumed to be same after scaling, but this property doesn't hold after the error generation. 
-% Mean, variance, skewness and curtosis should fluctuate within 20\%. 
-% This means that if originally feature was approximately symmetric (skeweness between -0.5 and 0.5), the skeweness of the symmetric should be within [-0.7, 0.7] interval.
-% \\
-% For easier error introduction and to assure that the feature type constraints are not violated, the schema of the original data is detected and preserved.
-% Schema detection is implemented by sampling the input dataset and extracting basic data types (e.g., integer, float, string). 
-% \\
-% To trace changes during the error introduction masks are computed as described in Chapter 3. Additionally, statistics of scaled data are modified.
-% % TODO 
-% \\In distributed setting, distinct values and other statistics are computed before partitioning. 
-
+\begin{equation}
+\label{eq:distincts}
+d_{generated} = d_{clean} + d_{mv} + d_{typos} + d_{outliers} + d_{swaps}
+\end{equation}
+If any of constraints are violated, the user is informed about these specific violations. 
+Additionally, characteristics of the generated dataset are stored into separate logging files. 
+They contain information such as statistics, error distribution, and binary masks.
+All this information can be useful since recomputing it can be time consuming, especially at large scales.
