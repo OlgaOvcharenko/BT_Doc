@@ -1,24 +1,26 @@
 \chapter*{Abstract}
 
-% State the problem (50 words)
+% State the problem
 Data preparation is a crucial part of the data science lifecycle.
 Most state-of-the-art tools and frameworks contain data cleaning functionality, 
-but many of them require manual effort to prepare the input or define constraints.
-% There is a lack of cleaning for ML benchmarks, 
-- There is a lack of large datasets with GT or only synthetic that dont reproduce real-world problems
-- For evaluation of tools large new datasets are needed
-
-% Say why it is  an interesting problem (100 words)
-- Challenge of large data set cleaning (current design is validated small scale in papers)
-
-% Say what your solution achieves (50 words)
-- Scaling to x
-- Running time scale Linear
-- New algorithms
-- Statistics preservation
-
+but many of them require manual effort to prepare the input or to define constraints.
+There is a lack of large real-world datasets with ground truth that can be used by machine learning (ML) benchmarks or cleaning frameworks, e.g. for results evaluation.
+The best existing solution is generation of synthetic data, but it doesn't represent the real-world problems and errors.
+% Say why it is  an interesting problem
+It would be interesting and helpful for the community if one could cheaply generate new large datasets from small samples of dirty and clean data.
+Since any non-trivial data sizes lead to new challenges, both in data cleaning and full ML pipelines.
+% Say what your solution achieves (200 words)
+Hence, this work focuses on data generation, observations of the original clean and dirty data are used to scale up to arbitrary data sizes.
+The biggest scaling factor achieved is 65536x, and the largest data size achieved was 18 GB.
+These results were gained under the constraints of preserving data statistics and error distribution, and, therefore, new algorithms were applied.
+The generator can run either locally, or distributed via Apache Spark.
+As expected, the local execution is faster for small scaling factors up to 42x, 
+while, on the other hand, when scaling to larger sizes the distributed execution performs better.
 % Say what follows from your solution (25 words)
-- Establishment of new benchmarks with scaling datasets with stable properties.
+Starting out, it was challenging to introduce errors preserving characteristics of the original dataset. 
+% since such errors as e.g. outliers change the mean drastically.
+The proposed framework solves the large-scale data generation problem, and provides a solution for cleaning for ML benchmarks by scaling data and its distribution.
 
 
+% 261 words
 \newpage\null\thispagestyle{empty}\newpage

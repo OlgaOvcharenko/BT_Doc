@@ -85,12 +85,13 @@ There are also not many swaps in the given data, although this is a common mista
 \end{figure}
 
 \begin{table}[!t]
+\centering
 \caption{\label{tab:dirty_num_errors}Dirty dataset error characteristics}
-\begin{tabular}{r|l|l|l|l|l}
+\begin{tabular}{r|K|K|K|K|K}
 \toprule
-                     & Outliers & Typos & Missing values & Replacement & Swaps \\ \midrule
+                     & \colCenter{Outliers} & \colCenter{Typos} & \colCenter{MV}             & \colCenter{Rep}              & \colCenterNoRight{Swaps}   \\ \midrule
 beers                & 0        & 254   & 4170           & 0                & 0       \\
-flights              & 0        & 2243  & 0              & 314              & 0     \\
+flights              & 0        & 4606  & 0              & 314              & 0       \\
 hospital             & 0        & 417   & 92             & 0                & 0       \\
 movies               & 0        & 982   & 6346           & 141              & 0       \\
 rayyan               & 0        & 649   & 75             & 224              & 0       \\
@@ -145,51 +146,52 @@ This happens because of a high amount of typos in both datasets.
     \label{exp:distincts_tax}
 \end{subfigure}
 \hfill
-% TODO describe 
-        
 \caption{Distinct values distribution of clean and dirty datasets}
 \label{exp:distinct_values_datasets}
 \end{figure}
 
+\textbf{Scaling the datsets} effect the error distribution, and is shown for tax in Table~\ref{tab:local_errors_tax} and for the other datasets in Appendix~\ref{apendix:error_counts_scaling}.
+% TODO Describe
 
-% % TODO Each column which type of error is present in which column.
-% \begin{figure}[!t]
-%     \centering 
-%     \centering
-% \begin{subfigure}{0.4\textwidth}
-%     \includegraphics[width=\textwidth]{example-image-a}
-%     \caption{\label{exp:barplot_error_count_bears}Bears}
-% \end{subfigure}
-% \hfill
-% \begin{subfigure}{0.4\textwidth}
-%     \includegraphics[width=\textwidth]{example-image-a}
-%     \caption{\label{exp:barplot_error_count_flights}Flights}
-% \end{subfigure}
-% \hfill
-% \begin{subfigure}{0.4\textwidth}
-%     \includegraphics[width=\textwidth]{example-image-a}
-%     \caption{\label{fig:barplot_error_count_hospital}Hospital}
-% \end{subfigure}
-% \hfill
-% \begin{subfigure}{0.4\textwidth}
-%     \includegraphics[width=\textwidth]{example-image-a}
-%     \caption{\label{exp:barplot_error_count_movies}Movies}
-% \end{subfigure}
-% \hfill
-% \begin{subfigure}{0.4\textwidth}
-%     \includegraphics[width=\textwidth]{example-image-a}
-%     \caption{\label{exp:barplot_error_count_rayyan}Rayyan}
-% \end{subfigure}
-% \hfill
-% \begin{subfigure}{0.4\textwidth}
-%     \includegraphics[width=\textwidth]{example-image-a}
-%     \caption{\label{exp:barplot_error_count_tax}Tax}
-% \end{subfigure}
-% \hfill
-% \begin{subfigure}{0.4\textwidth}
-%     \includegraphics[width=\textwidth]{example-image-a}
-%     \caption{\label{exp:barplot_error_count_toy}Toy}
-% \end{subfigure}
-% \caption{Number of errors in each dataset}
-% \label{exp:barplot_error_counts_datasets}
-% \end{figure}
+\begin{table}[!t]
+\caption{\label{tab:local_errors_tax} Local error distribution in tax}
+\centering
+\begin{tabular}{r|K|K|K|K|K}
+\toprule
+\colCenter{Scale} & \colCenter{Outliers} & \colCenter{Typos} & \colCenter{MV} & \colCenter{Rep} & \colCenterNoRight{Swaps}  \\ \midrule
+ 1  &   2 &   1367 &    588 &    1200 &    4 \\
+ 2  &   4 &   2734 &   1176 &    2400 &    6 \\
+ 4  &   8 &   5468 &   2352 &    4800 &   12 \\
+ 8  &  16 &  10936 &   4704 &    9600 &   23 \\
+16  &  32 &  21842 &   9408 &   19200 &   48 \\
+32  &  64 &  43744 &  18816 &   38400 &   96 \\
+64  & 128 &  87488 &  37632 &   76800 &  189 \\
+128 & 256 & 174976 &  75264 &  153600 &  378 \\
+256 & 512 & 349952 & 150528 &  307200 &  756 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Scaling distinct values} is more interesting, and is shown for tax in Table~\ref{tab:dist_errors_tax} and the other datasets in Appendix~\ref{apendix:distinct_errors_scaling}.
+% TODO Describe
+
+\newcolumntype{S}{>{\raggedleft\arraybackslash$}p{2.0cm}<{$}}
+
+\begin{table}[!t]
+\caption{\label{tab:dist_errors_tax} Local errors distincts in tax}
+\centering
+\begin{tabular}{r|H|H|H|H|K|K|S}
+               & \multicolumn{2}{c|}{\textbf{Typos}}   & \multicolumn{2}{c|}{\textbf{MV}} & \multicolumn{2}{c|}{\textbf{Distinct}}  & \multicolumn{1}{c}{\textbf{Outliers}}\\
+\colCenter{Scale} & \colCenter{Est} & \colCenter{Act} &  \colCenter{Est} & \colCenter{Act} & \colCenter{Est} & \colCenter{Act}   & \colCenterNoRight{Act}   \\ \midrule
+1              & 81  & 81    & 6    & 6   & 275201   & 275201 &  2    \\
+2              & 83  & 83    & 9    & 11  & 275260   & 275257 &  4    \\
+4              & 84  & 84    & 15   & 16  & 275271   & 275261 &  4    \\
+8              & 86  & 86    & 27   & 22  & 275293   & 275272 &  5    \\
+16             & 89  & 89    & 51   & 28  & 275336   & 275286 &  5    \\
+32             & 96  & 96    & 89   & 29  & 275413   & 275296 &  8    \\
+64             & 107 & 107   & 138  & 23  & 275537   & 275306 &  12   \\ 
+128            & 129 & 129   & 264  & 22  & 275813   & 275332 &  32   \\
+\bottomrule
+\end{tabular}
+\end{table}
+

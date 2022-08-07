@@ -1,0 +1,182 @@
+
+\chapter{Error counts scaling}
+\label{apendix:error_counts_scaling}
+
+Error counts for the different datasets:
+
+\begin{table}[!ht]
+\caption{\label{tab:local_errors_beers} Local error distribution in beers}
+\centering
+\begin{tabular}{r|K|K|K|K|K}
+\toprule
+\colCenter{Scale} & \colCenter{Outliers} & \colCenter{Typos} & \colCenter{MV} & \colCenter{Rep} & \colCenterNoRight{Swaps} \\ \midrule
+1              & 0        & 254            & 4170                    &  0     &  0              \\
+2              & 0        & 508            & 8340                    &  0     &  0              \\
+4              & 0        & 1016           & 16680                   &  0     &  0              \\
+8              & 0        & 2032           & 33360                   &  0     &  0              \\
+16             & 0        & 4064           & 66720                   &  0     &  0              \\
+32             & 0        & 8128           & 133440                  &  0     &  0              \\
+64             & 0        & 16256          & 266880                  &  0     &  0              \\ 
+128 & 0 & 32512  & 533760 & 0 & 0 \\
+256 & 0 & 65024  & 1067520 & 0 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!ht]
+\caption{\label{tab:local_errors_flights} Local error distribution in flights}
+\centering
+\begin{tabular}{r|K|K|K|K|K}
+\toprule
+\colCenter{Scale} & \colCenter{Outliers} & \colCenter{Typos} & \colCenter{MV} & \colCenter{Rep} & \colCenterNoRight{Swaps}  \\ \midrule
+1              & 0        & 4606            & 0                  &  314       &  0              \\
+2              & 0        & 9212            & 0                  &  628       &  0              \\
+4              & 0        & 18424           & 0                  &  1256      &  0              \\
+8              & 0        & 36848           & 0                  &  2512      &  0              \\
+16             & 0        & 73696           & 0                  &  5024      &  0              \\
+32             & 0        & 147392          & 0                  &  10048     &  0              \\
+64             & 0        & 294784          & 0                  &  20096     &  0              \\
+128 & 0 & 589568  & 0 & 40192 & 0 \\
+256 & 0 & 1179136 & 0 & 80384 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!ht]
+\caption{\label{tab:local_errors_hospital} Local error distribution in hospital}
+\centering
+\begin{tabular}{r|K|K|K|K|K}
+\toprule
+\colCenter{Scale} & \colCenter{Outliers} & \colCenter{Typos} & \colCenter{MV} & \colCenter{Rep} & \colCenterNoRight{Swaps}  \\ \midrule
+1              & 0        & 417            & 92                   &  0       &  0              \\
+2              & 0        & 834            & 184                  &  0       &  0              \\
+4              & 0        & 1668           & 368                  &  0       &  0              \\
+8              & 0        & 3336           & 736                  &  0       &  0              \\
+16             & 0        & 6672           & 1472                 &  0       &  0              \\
+32             & 0        & 13344          & 2944                 &  0       &  0              \\
+64             & 0        & 26688          & 5888                 &  0       &  0              \\ 
+128 & 0 & 53376 & 11776 & 0 & 0 \\
+256 & 0 & 106752 & 23552 & 0 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!ht]
+\caption{\label{tab:local_errors_movies} Local error distribution in movies}
+\centering
+\begin{tabular}{r|K|K|K|K|K}
+\toprule
+\colCenter{Scale} & \colCenter{Outliers} & \colCenter{Typos} & \colCenter{MV} & \colCenter{Rep} & \colCenterNoRight{Swaps}  \\ \midrule
+1              & 0        & 982            & 6346                   &  142       &  0              \\
+2              & 0        & 1964           & 12692                  &  284       &  0              \\
+4              & 0        & 3928           & 25384                  &  568       &  0              \\
+8              & 0        & 7856           & 50768                  &  1136       &  0              \\
+16             & 0        & 15712          & 101536                 &  2272       &  0              \\
+32             & 0        & 31424          & 203072                 &  4544       &  0              \\
+64             & 0        & 62848          & 406144                 &  9088       &  0              \\
+128            & 0        & 125696          & 812288                 &  18176       &  0              \\ 
+256            & 0        & 251392          & 1624576                 &  36352       &  0              \\   \bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!ht]
+\caption{\label{tab:local_errors_rayyan} Local error distribution in rayyan}
+\centering
+\begin{tabular}{r|K|K|K|K|K}
+\toprule
+\colCenter{Scale} & \colCenter{Outliers} & \colCenter{Typos} & \colCenter{MV} & \colCenter{Rep} & \colCenterNoRight{Swaps}  \\ \midrule
+1              & 0        & 649            & 75                   &  224         &  0              \\
+2              & 0        & 1298           & 150                  &  448         &  0              \\
+4              & 0        & 2596           & 300                  &  896         &  0              \\
+8              & 0        & 5192           & 600                  &  1792        &  0              \\
+16             & 0        & 10384          & 1200                 &  3584        &  0              \\
+32             & 0        & 20768          & 2400                 &  7168        &  0              \\
+64             & 0        & 41536          & 4800                 &  14336       &  0              \\ 
+128             & 0        & 83072          & 9600                 &  28672       &  0              \\ 
+256             & 0        & 166144          & 19200                 &  57344       &  0              \\  \bottomrule
+\end{tabular}
+\end{table}
+
+\newpage
+\chapter{Distinct Errors Scaling}
+\label{apendix:distinct_errors_scaling}
+
+Scaling the distinct errors for the different datasets.
+
+\begin{table}[!ht]
+\caption{\label{tab:dist_errors_beer} Local errors distincts in beer}
+\centering
+\begin{tabular}{r|H|H|H|H|H|H}
+               & \multicolumn{2}{c|}{\textbf{Typos}}   & \multicolumn{2}{c|}{\textbf{MV}}  & \multicolumn{2}{c}{\textbf{Distinct}}\\
+\colCenter{Scale} & \colCenter{Est} & \colCenter{Act} & \colCenter{Est} & \colCenter{Act} & \colCenter{Est}   & \colCenterNoRight{Act}   \\ \midrule
+1              &  97    & 97              & 3  & 6  & 9038   & 9038      \\
+2              &  167   & 167             & 3  & 6  & 9128   & 9116      \\
+4              &  290   & 290             & 3  & 6  & 9251   & 9241      \\
+8              &  526   & 526             & 3  & 6  & 9487   & 9474      \\
+16             &  994   & 994             & 3  & 6  & 9955   & 9938      \\
+32             &  1926  & 1923            & 3  & 6  & 10887  & 10866     \\
+64             &  3789  & 3786            & 3  & 6  & 12750  & 12699     \\ 
+128            &  7514   &   7405         & 3  & 6  & 16475  & 16290     \\
+256            &  14964  &  14575         & 3  & 6  & 23925  & 23420     \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!ht]
+\caption{\label{tab:dist_errors_flights} Local errors distincts in flights}
+\centering
+\begin{tabular}{r|H|H|H|H|H|H}
+               & \multicolumn{2}{c|}{\textbf{Typos}}   & \multicolumn{2}{c|}{\textbf{MV}}  & \multicolumn{2}{c}{\textbf{Distinct}}\\
+\colCenter{Scale} & \colCenter{Est} & \colCenter{Act} & \colCenter{Est} & \colCenter{Act} & \colCenter{Est}   & \colCenterNoRight{Act}   \\ \midrule
+1              & 651   & 651    & 0  & 0  & 3512  & 3512     \\
+2              & 808   & 808    & 0  & 0  & 3682  & 3682     \\
+4              & 1012  & 1012   & 0  & 0  & 3886  & 3883     \\
+8              & 1334  & 1334   & 0  & 0  & 4208  & 4204     \\
+16             & 1940  & 1937   & 0  & 0  & 4814  & 4796     \\
+32             & 3136  & 3126   & 0  & 0  & 6010  & 5974     \\
+64             & 5521  & 5473   & 0  & 0  & 8395  & 8309     \\
+128            & 10151  & 10012   & 0  & 0  & 13025  & 12816     \\
+256            & 17301  & 16968   & 0  & 0  & 20175  & 19728     \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!ht]
+\caption{\label{tab:dist_errors_hospital} Local errors distincts in hospital}
+\centering
+\begin{tabular}{r|H|H|H|H|H|H}
+               & \multicolumn{2}{c|}{\textbf{Typos}}   & \multicolumn{2}{c|}{\textbf{MV}}  & \multicolumn{2}{c}{\textbf{Distinct}}\\
+\colCenter{Scale} & \colCenter{Est} & \colCenter{Act} & \colCenter{Est} & \colCenter{Act} & \colCenter{Est}   & \colCenterNoRight{Act}   \\ \midrule
+1              & 311   & 311    & 3  & 3  & 2094  & 2094     \\
+2              & 568   & 568    & 3  & 6  & 2357  & 2355     \\
+4              & 1060  & 1058   & 3  & 6  & 2849  & 2841     \\
+8              & 2039  & 2037   & 3  & 6  & 3828  & 3809     \\
+16             & 3992  & 3977   & 3  & 6  & 5781  & 5735     \\
+32             & 7899  & 7839   & 3  & 6  & 9688  & 9571     \\
+64             & 15711 & 15493  & 3  & 6  & 17200 & 17181     \\ 
+64             & 31336 & 30223  & 3  & 6  & 33125 & 31801     \\ 
+64             & 62584 & 59268  & 3  & 6  & 64373 & 60722     \\ 
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!ht]
+\caption{\label{tab:dist_errors_movies} Local errors distincts in movies}
+\centering
+\begin{tabular}{r|H|H|H|H|K|K}
+               & \multicolumn{2}{c|}{\textbf{Typos}}   & \multicolumn{2}{c|}{\textbf{MV}}  & \multicolumn{2}{c}{\textbf{Distinct}}\\
+\colCenter{Scale} & \colCenter{Est} & \colCenter{Act} & \colCenter{Est} & \colCenter{Act} & \colCenter{Est}   & \colCenterNoRight{Act}   \\ \midrule
+1              & 868   & 868    & 3  & 3  & 62444  & 62444     \\
+2              & 1667  & 1667   & 3  & 6  & 69010  & 68659     \\
+4              & 3227  & 3226   & 3  & 6  & 70570  & 68547     \\
+8              & 6321  & 6317   & 3  & 6  & 73664  & 72970     \\
+16             & 12498 & 12494  & 3  & 6  & 79841  & 79702     \\
+32             & 24846 & 24833  & 3  & 6  & 92189  & 92066     \\
+64             & 49539 & 49486  & 3  & 6  & 116882 & 116613     \\ 
+64             & 98924 & 98746  & 3  & 6  & 116882 & 116613     \\ 
+64             & 197695 & 49486  & 3  & 6  & 116882 & 116613     \\ 
+
+\bottomrule
+\end{tabular}
+\end{table}
+
