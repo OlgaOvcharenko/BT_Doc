@@ -167,6 +167,7 @@
 \usepackage[parfill]{parskip}
 
 \usepackage{tikz}
+\usepackage{tabu}
 
 \usetikzlibrary{
     matrix,
@@ -195,6 +196,10 @@
 \newcommand{\colCenter}[1]{\multicolumn{1}{c|}{\textbf{#1}}}
 \newcommand{\colCenterNoRight}[1]{\multicolumn{1}{c}{\textbf{#1}}}
 
+\makeatletter
+\newrobustcmd*{\setmaxbibnames}{\numdef\blx@maxbibnames}
+\newrobustcmd*{\setminbibnames}{\numdef\blx@minbibnames}
+\makeatother
 
 \hyphenation{ex-am-ple hy-phen-ate}  %% in order to use German umlauts
 %% here (Ver-\"of-fent-li-chung), you have to check for
@@ -251,6 +256,8 @@
 \include{content/chapter4/index}
 \include{content/conclusion}
 
+
+\setmaxbibnames{999}
 \printbibliography              %% remove, if using BibTeX instead of biblatex
 % \include{further_ressources}  %% this is a suggestion: you have to create this file on demand
 

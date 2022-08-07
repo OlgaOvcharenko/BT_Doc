@@ -87,7 +87,7 @@ Since the main workload of the framework is in this phase, each column is proces
 Typos, missing values and replacements are added to the scaled dataset in the first iteration.
 For missing values and typos the distinct items sets and frequencies are gathered from the error analysis and statistics phases. 
 Existing missing values and typos frequencies are scaled by scaling factor. Additionally, a specific number of new unique values is generated, this number is estimated as described in Scaling up.
-The number of occurrences of a new unseen unique value is computed similar to n-gram smoothing techniques~\cite{ngrams}. 
+The number of occurrences of a new unseen unique value is computed similar to n-gram smoothing techniques. 
 The new frequency of unseen values is defined by Laplace smoothing "add-one" to avoid the zero-frequency problem.
 The zero-frequency problem: If an individual class label is missing, then the frequency-based probability estimate will be zero.
 To introduce the errors into the data, a vector with shuffled random indices is allocated and then utilized. 
