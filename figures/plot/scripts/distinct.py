@@ -1,10 +1,9 @@
 
-from pathlib import Path
 import argparse
 import ast
 import os
-import math
-import matplotlib as mpl
+from pathlib import Path
+
 import matplotlib.pyplot as plt
 import numpy as np
 
