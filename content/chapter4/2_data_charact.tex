@@ -99,12 +99,12 @@ tax                  & 2        & 1367  & 588            & 1200             & 4 
 \end{tabular}
 \end{table}
 
-\textbf{Distinct values} are also interesting in terms of data distribution, and impact of errors on number of distinct items.
+\textbf{Distinct values} are also interesting in terms of data distribution, and errors impact the distinct items set.
 Figure~\ref{exp:distinct_values_datasets} shows how the distinct value set in columns changes after error introduction. 
-The x-axis represents each feature of the dataset, while y-axis is log-scaled and shows number of distinct values. 
-Blue color represents clean data, red color - dirty.
-It is noticeable that in \textit{bears}, as stated earlier, one column is treated as completely missing.
-On the other hand, in \textit{hospitals} and \textit{flights} the number of distinct item increases.
+The x-axis represents each feature of the dataset, while the y-axis is log-scaled and shows the number of distinct values. 
+The blue color represents clean data while the red color stands for dirty.
+It is noticeable that in \textit{beers}, as stated earlier, one column is treated as completely missing.
+On the other hand, in \textit{hospitals} and \textit{flights} the number of distinct items increases.
 This happens because of a high amount of typos in both datasets.
 
 \begin{figure}[!t]
@@ -150,8 +150,12 @@ This happens because of a high amount of typos in both datasets.
 \label{exp:distinct_values_datasets}
 \end{figure}
 
-\textbf{Scaling the datsets} effect the error distribution, and is shown for tax in Table~\ref{tab:local_errors_tax} and for the other datasets in Appendix~\ref{apendix:error_counts_scaling}.
-% TODO Describe
+\textbf{Scaling error distribution} is shown for \textit{tax} in Table~\ref{tab:local_errors_tax}, other datasets are described in Appendix~\ref{apendix:error_counts_scaling}. 
+In the Table row 1 is the error distribution of original dirty data.
+It is guaranteed that errors scale linearly within 10\% of original number of errors.
+It can be observed that there is no necessity in 10\% bound for local execution since number of errors is perfectly matching the expected.
+
+% TODO compare to distributed
 
 \begin{table}[!t]
 \caption{\label{tab:local_errors_tax} Local error distribution in tax}
@@ -160,38 +164,140 @@ This happens because of a high amount of typos in both datasets.
 \toprule
 \colCenter{Scale} & \colCenter{Outliers} & \colCenter{Typos} & \colCenter{MV} & \colCenter{Rep} & \colCenterNoRight{Swaps}  \\ \midrule
  1  &   2 &   1367 &    588 &    1200 &    4 \\
- 2  &   4 &   2734 &   1176 &    2400 &    6 \\
- 4  &   8 &   5468 &   2352 &    4800 &   12 \\
- 8  &  16 &  10936 &   4704 &    9600 &   23 \\
-16  &  32 &  21842 &   9408 &   19200 &   48 \\
-32  &  64 &  43744 &  18816 &   38400 &   96 \\
-64  & 128 &  87488 &  37632 &   76800 &  189 \\
-128 & 256 & 174976 &  75264 &  153600 &  378 \\
-256 & 512 & 349952 & 150528 &  307200 &  756 \\
+ 2  &   4 &   2734 &   1176 &    2400 &    8 \\
+ 4  &   8 &   5468 &   2352 &    4800 &   16 \\
+ 8  &  16 &  10936 &   4704 &    9600 &   32 \\
+16  &  32 &  21842 &   9408 &   19200 &   64 \\
+32  &  64 &  43744 &  18816 &   38400 &  128 \\
+64  & 128 &  87488 &  37632 &   76800 &  256 \\
+128 & 256 & 174976 &  75264 &  153600 &  512 \\
+256 & 512 & 349952 & 150528 &  307200 & 1024 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\textbf{Scaling distinct values} is more interesting, and is shown for tax in Table~\ref{tab:dist_errors_tax} and the other datasets in Appendix~\ref{apendix:distinct_errors_scaling}.
-% TODO Describe
+\textbf{Scaling distinct values} is more challenging. 
+Table~\ref{tab:dist_errors_tax} shows how the number of distinct values of each error type changes for different scaling factors.
+Typos, missing values and distincts are represented by estimated (\textit{Est}) and actual (\textit{Act}) number of distinct items.
+It is noticeable that typos are scaled according to the estimation.
+Missing values differ from estimation because the set of new distinct missing values, that can be added randomly, is limited. % and hard-coded.
+There is no estimation of distinct outlier values since the original outlier distribution is fully reused, and newly generated values are used instead of original. 
+Column \textit{Distinct} represents number of estimated and observed number of distinct values in the whole dataset.
+Since some errors are introduced at random, it is expected that estimation slightly differs from actual value. 
 
 \newcolumntype{S}{>{\raggedleft\arraybackslash$}p{2.0cm}<{$}}
 
 \begin{table}[!t]
 \caption{\label{tab:dist_errors_tax} Local errors distincts in tax}
 \centering
-\begin{tabular}{r|H|H|H|H|K|K|S}
-               & \multicolumn{2}{c|}{\textbf{Typos}}   & \multicolumn{2}{c|}{\textbf{MV}} & \multicolumn{2}{c|}{\textbf{Distinct}}  & \multicolumn{1}{c}{\textbf{Outliers}}\\
-\colCenter{Scale} & \colCenter{Est} & \colCenter{Act} &  \colCenter{Est} & \colCenter{Act} & \colCenter{Est} & \colCenter{Act}   & \colCenterNoRight{Act}   \\ \midrule
-1              & 81  & 81    & 6    & 6   & 275201   & 275201 &  2    \\
-2              & 83  & 83    & 9    & 11  & 275260   & 275257 &  4    \\
-4              & 84  & 84    & 15   & 16  & 275271   & 275261 &  4    \\
-8              & 86  & 86    & 27   & 22  & 275293   & 275272 &  5    \\
-16             & 89  & 89    & 51   & 28  & 275336   & 275286 &  5    \\
-32             & 96  & 96    & 89   & 29  & 275413   & 275296 &  8    \\
-64             & 107 & 107   & 138  & 23  & 275537   & 275306 &  12   \\ 
-128            & 129 & 129   & 264  & 22  & 275813   & 275332 &  32   \\
+\begin{tabular}{r|H|H|H|H|K||K|S}
+\toprule
+               & \multicolumn{2}{c|}{\textbf{Typos}}   & \multicolumn{2}{c|}{\textbf{MV}} &   \multicolumn{1}{c||}{\textbf{Outliers}} &  \multicolumn{2}{c}{\textbf{Distinct}}\\
+\colCenter{Scale} & \colCenter{Est} & \colCenter{Act} &  \colCenter{Est} & \colCenter{Act} & \multicolumn{1}{c||}{\textbf{{Act}}} & \colCenter{Est}   & \colCenterNoRight{Act}   \\ \midrule
+1              & 81  & 81    & 6    & 6    &  2  & 275201   & 275201   \\
+2              & 83  & 83    & 9    & 11   &  4  & 275260   & 275257   \\
+4              & 84  & 84    & 15   & 16   &  4  & 275271   & 275261   \\
+8              & 86  & 86    & 27   & 22   &  5  & 275293   & 275272   \\
+16             & 89  & 89    & 51   & 28   &  5  & 275336   & 275286   \\
+32             & 96  & 96    & 89   & 29   &  8  & 275413   & 275296   \\
+64             & 107 & 107   & 138  & 23   &  12 & 275537   & 275306   \\ 
+128            & 129 & 129   & 264  & 22   &  32 & 275813   & 275332   \\
 \bottomrule
 \end{tabular}
 \end{table}
 
+
+\begin{figure}[!t]
+    \centering 
+    \centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{figures/plot/mean/mean_diff_beers.pdf}
+    \caption{Bears}
+    \label{exp:mean_bears}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{figures/plot/mean/mean_diff_flights.pdf}
+    \caption{Flights}
+    \label{exp:mean_flights}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{figures/plot/mean/mean_diff_hospital.pdf}
+    \caption{Hospital}
+    \label{fig:mean_hospitals}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{figures/plot/mean/mean_diff_movies.pdf}
+    \caption{Movies}
+    \label{exp:mean_movies}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{figures/plot/mean/mean_diff_rayyan.pdf}
+    \caption{Rayyan}
+    \label{exp:mean_rayyan}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{figures/plot/mean/mean_diff_tax.pdf}
+    \caption{Tax}
+    \label{exp:mean_tax}
+\end{subfigure}
+\hfill
+\caption{Mean difference in percent scaling clean and dirty datasets}
+\label{exp:mean_difference_datasets}
+\end{figure}
+
+
+\begin{figure}[!t]
+    \centering 
+    \centering
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{figures/plot/var/variance_diff_beers.pdf}
+    \caption{Bears}
+    \label{exp:var_bears}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{figures/plot/var/variance_diff_flights.pdf}
+    \caption{Flights}
+    \label{exp:var_flights}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{figures/plot/var/variance_diff_hospital.pdf}
+    \caption{Hospital}
+    \label{fig:var_hospitals}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{figures/plot/var/variance_diff_movies.pdf}
+    \caption{Movies}
+    \label{exp:var_movies}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{figures/plot/var/variance_diff_rayyan.pdf}
+    \caption{Rayyan}
+    \label{exp:var_rayyan}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+    \includegraphics[width=\textwidth]{figures/plot/var/variance_diff_tax.pdf}
+    \caption{Tax}
+    \label{exp:var_tax}
+\end{subfigure}
+\hfill
+\caption{Variance difference in percent scaling clean and dirty datasets}
+\label{exp:var_difference_datasets}
+\end{figure}
+
+
+\textbf{After generation, statistics} are expected to be within 5\% of original statistics.
+Figures~\ref{exp:mean_difference_datasets} and \ref{exp:var_difference_datasets} show that mean and variance are preserved.
+In all figures, x-axis represents the scaling factor and y-axis is the percent difference of the original dirty and generated mean.
+The percentage difference is less than 1\% for all datasets except \textit{movies}.
+Since \textit{movies} dataset contains one fully missing column, as mentioned before, the statistical properties are not preserved, mean of \textit{movies} is infinity. 
+The other datasets' plots are contained in Appendix~\ref{apendix:min_max_local_difference}.
