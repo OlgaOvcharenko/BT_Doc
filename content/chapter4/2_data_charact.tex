@@ -299,5 +299,6 @@ Since some errors are introduced at random, it is expected that estimation sligh
 Figures~\ref{exp:mean_difference_datasets} and \ref{exp:var_difference_datasets} show that mean and variance are preserved.
 In all figures, x-axis represents the scaling factor and y-axis is the percent difference of the original dirty and generated mean.
 The percentage difference is less than 1\% for all datasets except \textit{movies}.
-Since \textit{movies} dataset contains one fully missing column, as mentioned before, the statistical properties are not preserved, mean of \textit{movies} is infinity. 
-The other datasets' plots are contained in Appendix~\ref{apendix:min_max_local_difference}.
+Since the \textit{movies} dataset contains one fully missing column, as mentioned before, and the statistical properties are not preserved, mean of the \textit{movies} is infinity. 
+The \textit{tax} dataset variance also differs from the original variance because introduced outlier values are significantly different from the clean dataset distinct values.
+The min and max plots are contained in Appendix~\ref{apendix:min_max_local_difference}.

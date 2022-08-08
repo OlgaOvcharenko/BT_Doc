@@ -1,2 +1,36 @@
 \chapter{Conclusion and Future Work}
-% TODO What follows, Limitations, Future Work - 3 paragraphs
+% What follows
+The framework proposed in this work initiates the large-scale generation of dirty data, in which original real-world observations are used to extract error patterns and create new observations.
+The new data generation framework scales existing datasets while preserving error distribution and statistics.
+The experiments show linear performance in distributed execution, and super linear in local execution.
+The biggest data size generated is 18 GB that corresponds to a scaling factor of 65536x.
+Six different datasets with ground truth were used for experiments: five real-world and one synthetic.
+Different scaling factors were tested on all datasets.
+Thus, it is demonstrated that it is possible to generate large datasets while preserving statistics of a small sample of dirty data.
+
+% Lessons Learned
+It is challenging to generate datasets with statistical properties of the original dirty dataset.
+In this context, execution and optimization of distributed workloads is a non-trivial and time-consuming task.
+Researching the context of data cleaning and studying existing state-of-the-art frameworks also brought many insights of what can be done and improved.
+But the faced challenges were handled, and turned into the improvements of the framework and lessons learned.
+
+% Limitations and Future Work - 3 paragraphs
+Interesting directions for future work include 
+(1) optimization of the local execution, 
+(2) more advanced and fine-grained error detection and classification algorithms,
+(3) support of more error types, 
+(4) integration into data cleaning benchmarks, and
+(5) different techniques for scaling up such as random.
+
+
+% % Say what your solution achieves (200 words)
+% Hence, this work focuses on data generation, observations of the original clean and dirty data are used to scale up to arbitrary data sizes.
+% The biggest scaling factor achieved is 65536x, and the largest data size achieved was 18 GB.
+% These results were gained under the constraints of preserving data statistics and error distribution, and, therefore, new algorithms were applied.
+% The generator can run either locally, or distributed via Apache Spark.
+% As expected, the local execution is faster for small scaling factors up to 42x, 
+% while, on the other hand, when scaling to larger sizes the distributed execution performs better.
+% % Say what follows from your solution (25 words)
+% Starting out, it was challenging to introduce errors preserving characteristics of the original dataset. 
+% % since such errors as e.g. outliers change the mean drastically.
+% The proposed framework solves the large-scale data generation problem, and provides a solution for cleaning for ML benchmarks by scaling data and its distribution.

@@ -2,8 +2,8 @@
 \label{sec:runtime_local}
 
 Table~\ref{tab:local_runtimes} shows the runtimes of each dataset at different scales.
-Scaling factors were increased until the distributed started outperforming the local execution.
-It can be observed that at small scales execution time is near constant, this can be seen for all datasets up to the scaling factor 8 except \textit{tax}, that is the largest dataset and contains all types of errors.
+The scaling factors were increased until the distributed started outperforming the local execution.
+It can be observed that at small scales execution time is near constant, this can be seen for all datasets up to scaling factor 8 except \textit{tax}, that is the largest dataset and contains all types of errors.
 Once trivial sizes are exceeded, doubling data size leads to more than doubled execution time.
 This indicates super linear scaling of the data generation and validation.
 It is assumed that the performance of the framework should be linear, but, according to the measured times, this is not the case for the error generation part of the framework.

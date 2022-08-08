@@ -1,8 +1,22 @@
 \subsection{Distributed experiments}
 \label{sec:runtime_distributed}
 
+Table~\ref{tab:distributed_runtimes} shows the runtimes of different scaling factors in the distributed version of the data generator.
+The scaling factors were increased until the execution time didn't cross 12 hours per dataset.
+It can be observed that some datasets scale better than others, but that is mainly because sizes are not as big as \textit{tax} yet. 
+The complexity of Spark job is dominated by joins and repartitioning.
+The number of joins is based on error types introduced and amount of faulty columns in total.
+The joins are performed on sequential unique indices.
+The \textit{tax} contains all 5 types of errors what leads to more complicated Spark jobs and more joins.
+Also, the Spark Catalyst Optimizer tries to optimize the large sequences of instructions, this leads to long startup, compile and optimization times. 
+For instance, in scaling \textit{beers} to 2x the Spark context start up takes 25 seconds, data is scaled up (lazy evaluation) in 11 seconds, errors are saved to HDFS in 5 seconds, and new error distribution/statistics is computed in 11 seconds, and the result dataset is saved to HDFS in 25 seconds, plus various overheads of 7 seconds.
+According to the results, the proposed distributed data generator scales linearly.
 
-TOT mention 65K rayyan run
+\textbf{A faster option} would be to randomly generate errors and introduce them by udfs with random behaviour seeded on index.
+But choice of error type and preserving the error distribution is not guaranteed as in the proposed solutions.
+
+\textbf{The largest scaling factor} run is 65536x on \textit{rayyan} dataset. 
+The resulting datasize is 17.9 GB, the runtime is 17711 seconds (equivalent to approximately 5 hours).
 
 \begin{table}[!t]
 \caption{\label{tab:distributed_runtimes}Distributed runtimes [S] with different scales}
@@ -10,13 +24,13 @@ TOT mention 65K rayyan run
 \begin{tabular}{r|K|K|K|K|K|K}
 \toprule
 \textbf{Scale} & \colCenter{beers} & \colCenter{flights} & \colCenter{hospital} & \colCenter{movies} & \colCenter{rayyan} & \colCenterNoRight{tax} \\ \midrule
-   2 &   84.5 &  94.4 &   83.7 &  114.7 &  81.8 &   254.2 \\
-   8 &   85.5 &  96.8 &   86.4 &  118.3 &  84.7 &   582.5 \\
-  64 &   92.7 & 102.9 &   93.5 &  262.4 &  89.9 &  2978.0 \\
- 256 &  177.7 & 164.0 &  147.0 &  767.0 & 116.6 & 11369.3 \\
-1024 &  536.4 & 364.2 &  378.7 & 1799.1 & 276.4 & 48499.5 \\
-2048 &  923.7 &   --- &  661.3 & 3785.6 & 454.3 &     --- \\
-8192 & 2769.4 &   --- & 2061.6 &    --- &   --- &     --- \\
+   2 &   84.5 &  94.4 &   83.7 &  114.7     &  81.8     &   254.2 \\
+   8 &   85.5 &  96.8 &   86.4 &  118.3     &  84.7     &   582.5 \\
+  64 &   92.7 & 102.9 &   93.5 &  262.4     &  89.9     &  2978.0 \\
+ 256 &  177.7 & 164.0 &  147.0 &  767.0     & 116.6     & 11369.3 \\
+1024 &  536.4 & 364.2 &  378.7 & 1799.1     & 276.4     & 48499.5 \\
+2048 &  923.7 &   --- &  661.3 & 3785.6     & 454.3     &  --- \\
+8192 & 2769.4 &   --- & 2061.6 & 14512.8    & 1591.7   & --- \\
 \bottomrule
 \end{tabular}
 \end{table}
