@@ -23,3 +23,13 @@ If any of constraints are violated, the user is informed about these specific vi
 Additionally, characteristics of the generated dataset are stored into separate logging files. 
 They contain information such as statistics, error distribution, and binary masks.
 All this information can be useful since recomputing it can be time consuming, especially at large scales.
+
+\textbf{Local validation:} To compute statistical properties of the freshly generated data, Pandas API is used.
+
+\textbf{Distributed validation:} 
+In distributed data generation, Spark SQL aggregation functions are used to accumulate statistics.
+Interestingly, the performance of aggregating statistics impacts execution time. 
+Thus, Spark approximate algorithms were tried out, such as \textsc{approx\_count\_distinct}.
+But for small scaling factors these were inaccurate even with 10\% precision, estimating the number of distinct items less in original dirty dataset.
+Consequently, estimations and in-expectation statistics are not sufficient for this framework.
+Error distribution is computed while error generation.

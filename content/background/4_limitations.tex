@@ -6,14 +6,17 @@
 
 \textbf{Limited coverage}: Most of the existing frameworks or systems take into account either a subset of particular errors~\cite{boostclean, raha, baran, jenga}, or use syntactic data as a ground truth to then generate errors~\cite{RestatGCS2022, bart}.
 
-\textbf{Synthetically generated errors} are not representing real-world errors in the dataset. Existing frameworks support a subset of cleaning tasks and data modalities.
+\textbf{Synthetic data:} 
+Synthetically generated errors are not representing real-world errors in the dataset. Existing frameworks support a subset of cleaning tasks and data modalities.
 For the real-world data the ground truth and errors are unknown. Moreover, many datasets are publicly not available w/ or w/o ground truth (out of date links or no source provided).
 
-\textbf{Manual labeling}~\cite{raha, baran}, hand-crafted rules/constraints~\cite{bart, RestatGCS2022}, additional user inputs can also be seen as a restriction 
+\textbf{Manual effort:} 
+Hand-crafted rules/constraints~\cite{bart, RestatGCS2022}, manual labeling~\cite{raha, baran}, additional user inputs can also be seen as a restriction 
 since user at least is not always capable to formulate them correctly/fully. % TODO rewrite
 Additionally, existing work can be optimized by parallelizing the workflow~\cite{raha, baran, RekatsinasCIR2017, holodetect, RestatGCS2022, jenga}.
 
-\textbf{No standardized benchmark} for cleaning algorithms and methods for ML pipelines. 
+\textbf{No standardization:} 
+There is no standardized benchmark for cleaning algorithms and methods for ML pipelines. 
 Currently available frameworks require an additional input to make correct decisions during the cleaning. Manual cleaning to get the ground truth is practically infeasible on scale and takes a lot of effort.
 Moreover, manual cleaning may lead to biased results if the expert knowledge is not sufficient enough.
 Thus, there is need in a benchmark that standardizes the comparison and evaluation of data cleaning for ML, and aims to solve the problem of the missing ground truth or publicly not available datasets.

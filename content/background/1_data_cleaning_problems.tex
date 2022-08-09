@@ -1,4 +1,3 @@
-
 \section{Data Cleaning Problems}
 \label{sec:data_cleaning_problems}
 
@@ -6,11 +5,12 @@
 % Data validity problem. What, why is a problem
 The fundamental problem of the data cleaning is data validity.
 Data validation refers to the process of ensuring the quality of data, its fairness and accuracy. 
-Invalid, inconsistent data can bring a larger stream of issues - for instance the Garbage in , Garbage out (GIGO) concept.
+Invalid, inconsistent data can bring a larger stream of issues - for instance the Garbage in, Garbage out (GIGO) concept.
 Additionally, dirty data leads to wasted resources, extra cost, and time losses.
 
 % Exact problems - missing values, outliers & problem of automatization, how to prove that clean - HoloClean, when better to clean and when no
-\textbf{Data cleaning} can be divided into error detection and repair of inconsistencies to improve data quality.
+\textbf{Dirty data origin:} 
+Data cleaning can be divided into error detection and repair of inconsistencies to improve data quality.
 Errors in data appear due to:
 
 \begin{itemize}
@@ -20,14 +20,16 @@ Errors in data appear due to:
     \item Or measurement / processing errors that are mostly caused by unreliable tools.
 \end{itemize}
 
-\textbf{Common data cleaning problems} are presented in Table~\ref{tab:comon_cleaning_problems}.
+\textbf{Error detection and repair problems:}
+Common data cleaning problems are presented in Table~\ref{tab:comon_cleaning_problems}.
 We differentiate between error scopes: attribute/value, observation/record, feature or between multiple features. 
 A huge effort has been made in the research community to automate both error detection in combination with  repairing broken records. 
 It can not always be guaranteed that the cleaning performed on the dataset is sufficient.
 In some cases there is no sufficient probabilistic evidence that repairing the data is better than ignoring errors for specific cells~\cite{RekatsinasCIR2017}. 
 Additionally, for most of the real-world datasets the ground truth is unknown, and manual effort and domain knowledge are needed to establish it.
 
-\textbf{An important part of data cleaning} is the principle of minimality~\cite{minimality, RekatsinasCIR2017}.
+\textbf{Principle of minimality:} 
+An important part of data cleaning is the principle of minimality~\cite{minimality, RekatsinasCIR2017}.
 The fewer changes are that the cleaning introduce to the data during error repair, the less probable it is to violate integrity constraints.
 There is a number of mechanisms / approaches to detect and fix these issues~\cite{data_cleaning_methods}.
 Thus, data should be analyzed, modeled, enriched, validated, and debugged.

@@ -19,8 +19,8 @@ The framework contains full pipelines consisting of the following generalized st
 
 First, for scaling to in-memory sizes there is a local data generator execution that consists of the following steps that are also shown in Figure~\ref{fig:data_gen_local}:
 
-
-\textbf{Reading} of clean and dirty datasets is done via Pandas DataFrames. 
+\textbf{Read:} 
+Reading of clean and dirty datasets is done via Pandas DataFrames. 
 Pandas is chosen for its' flexibility, large API and ease of coding. 
 An important part of the reading is detecting a schema.
 Pandas has a schema detection that allows reading dirty data while handling features with different data types. 
@@ -29,8 +29,8 @@ These properties together allow creation of a save schema for the dirty data.
 But the automatic schema detection is not always precise, and integer cases can be detected as floats. 
 Therefore, for the clean data, custom schema detection is applied. A sample of the data is extracted and analysed for fine-grained data types. 
 
-
-\textbf{Error analysis} are performed on the clean and dirty datasets together.
+\textbf{Error analysis:} 
+Error analysis is performed on the clean and dirty datasets together.
 First, distinct values of actual data are aggregated, and a binary difference mask of clean and dirty datasets is created.
 The mask allows the framework to know the ratio and exact number of errors introduced in each feature, and to track detected and undetected errors. 
 Errors are analyzed in a particular sequence, since if cell was classified as error of one type, it can not contain any other error types, this is based on the simplifying assumption that there are no compound errors.
@@ -65,24 +65,24 @@ Finally, all remaining erroneous \emph{string} feature values are classified as 
 \textsc{STDO(v)} = v < \overline{a} - 3 \cdot \textsc{STD} \ \cap \ v > \overline{a} + 3 \cdot \textsc{STD} 
 \end{equation}
 
-
-\textbf{Statistics analysis} is performed by computation of univariate statistics such as min, max, mean, variance, kurtosis and skeweness are computed for both clean and dirty datasets.
+\textbf{Analysis of statistical properties:} 
+Statistics analysis is performed by computation of univariate statistics such as min, max, mean, variance, kurtosis and skeweness are computed for both clean and dirty datasets.
 When scaling the dataset, the framework strives towards maintaining these statistics at two steps.
 First, when scaling the clean dataset, the statistics of the clean dataset are maintained. 
 Second, when introducing errors, the detected errors and their distribution are preserved.
 To reflect a realistic dataset, Schlosser~\cite{HassNSS1995} and Hasso Stokes~\cite{HassS1998} distinct item estimators are used. 
 The dirty dataset is used as a sample of the generated. It is assumed that depending on the distribution of the distinct errors in the dirty dataset, more or a equivalent number of distinct values are introduced when scaling the data.
 
-
-\textbf{Scaling up} clean data while preserving statistics is challenging, especially if applied at random. 
+\textbf{Scaling up:} 
+Scaling up clean data while preserving statistics is challenging, especially if applied at random. 
 For instance, in a column with all unique values, the probability of selecting all values at least once is low when scaling factor is small. 
 It is similar to the rolling dice with 6 unique sides. 
 Scaling to 2x is equivalent to rolling 6 unique sides at least once with 12 trials.
 To avoid this inconsistency, it was chosen to scale up by replication. 
 If the scaling factor is greater is a floating point number, then the integer part is replicated, and the remaining floating part is sampled randomly from the clean data.
 
-
-\textbf{Error generation and introduction} is done column wise. 
+\textbf{Error generation and introduction:} 
+Error generation and introduction is done column wise. 
 Since the main workload of the framework is in this phase, each column is processed in parallel, with the exception of multi column errors such as swaps.
 Typos, missing values and replacements are added to the scaled dataset in the first iteration.
 For missing values and typos the distinct items sets and frequencies are gathered from the error analysis and statistics phases. 
@@ -101,18 +101,19 @@ The last step is the addition of outliers.
 They are applied at the end of the sequence because, if applied correctly, they can scale the mean of the new scaled dataset to the desired dirty mean through the technique described in Section~\ref{sec:error_types}. 
 
 
-\textbf{Writing} is done after the error generation. 
-The freshly generated dataset is saved to the disk in comma-separated values (CSV) format. 
+\textbf{Write:}  
+The freshly generated dataset is saved immediately after the error generation. It is written to the disk in comma-separated values (CSV) format. 
 Dataset is saved before validation to ensure that we have the generated data, even if validation fails or concludes invalid generation.
 
 
-\textbf{Validation} is the last step of the framework. It is done by comparing the statistics of the original dirty and generated datasets, the details are described in Section~\ref{sec:validation}.
+\textbf{Validation:} 
+The last stage of the framework is validation of generated dataset. It is done by comparing the statistics of the original dirty and generated datasets, the details are described in Section~\ref{sec:validation}.
 The error distribution of the generated dataset is stored while generating and introducing the errors.
 The univariate statistics are computed after the full generation is finished.
 Both univariate statistics and error distribution are used for the validation. 
 Additionally, all statistics are saved to files.
 
-\textbf{Limitations} of the local execution include:
+\textbf{Limitations of the local execution:} 
 The Pandas DatFrames are relatively slow. Pandas is written C, and switching between C and Python takes time, especially for mathematical computations and data retrieval.
 Another limitation is the in-memory computation. This means that data can not scale above aggregated memory of a single machine.
 Third, there is potential for more parallelization of different parts of the local execution. But the parts already parallelized include the critical parts.
@@ -121,28 +122,29 @@ Third, there is potential for more parallelization of different parts of the loc
 \subsection{Distributed Data Generation}
 \label{sec:distributed_generator}
 
-\textbf{The distributed generator} is for scaling to larger sizes of data that can not fit local memory restrictions.
+The distributed generator is for scaling to larger sizes of data that can not fit local memory restrictions.
 It consists of the following steps that are also shown in Figure~\ref{fig:data_gen_dist}:
 
-
-\textbf{Reading} of clean and dirty datasets is similar to local execution. 
+\textbf{Read:} 
+Reading of clean and dirty datasets is similar to local execution. 
 To compute statistics and detect schema, local Pandas DataFrames are used. 
 On the other hand, the lazily evaluated Spark DataFrame is defined for further scaling up.
 The schema applied to the Spark DataFrame is obtained from a schema detection of the dirty data in Spark.
 This is important to avoid schema violations while introducing different from data types into clean feature.  
 For instance, swaps can be introduced between numerical and string columns.
 
-\textbf{Error analysis and statistics} step is equivalent to the local.
+\textbf{Error analysis and statistics: } This step is equivalent to the local.
 
-\textbf{Distributed scale up} is achieved via three different phases. 
-Since Spark DataFrame is not indexed per default. 
-To scale it up, one of the possibilities is to append DataFrame to itself, similarly to the local.
+\textbf{Distributed scaling up:}
+Scaling of the dataset in distributed mode is achieved via three different phases. 
+Since Spark DataFrame is not indexed per default, to scale it up, one of the possibilities is to append DataFrame to itself, similarly to the local.
 But because of Spark usability and API, it is possible to avoid concatenation by using a combination of Spark user-defined function (\textsc{UDF}) and \textsc{explode}.
 First, we define a column with sequential indices. 
 Then, this column is used by a \textsc{UDF} to map each existing row index to a list of new sequential row indices.
 Finally, Spark \textsc{explode} utilizes these lists to "explode" (replicate) rows with a new index.
 
-\textbf{Erroneous values} are generated locally using error characteristics collected from the original dirty dataset.
+\textbf{Error generation:} 
+Erroneous values are generated locally using error characteristics collected from the original dirty dataset.
 The values are combined with row indices to create new error locations.
 Indices are chosen at random for missing values, typos and outliers, or based on the filtering of specific values for replacements and swaps.
 A challenging part here is to guarantee that indices are non-intersecting. 
@@ -151,12 +153,10 @@ This process is parallelized to write buffered strings of error tuples to HDFS, 
 These files can also be seen as meta data.
 Introducing the errors into the actual distributed scaled up dataset is done by reading errors into Spark DataFrame from HDFS, and joining it on synthetic index.
 
-\textbf{Writing to HFDS} was initially done using csv format, similar to the local data generation.
+\textbf{Write to HFDS:} 
+Writing to HDFS was initially done using csv format, similar to the local data generation.
 However, utilizing Spark compression and parquet format reduced runtime significantly.
 
-\textbf{Validation} same to local, except Spark functions are used to aggregate statistics for comparison of the generated and original dirty datasets. 
-Interestingly, the performance of aggregating statistics impacts execution time. 
-Thus, Spark approximate algorithms were tried out, such as \textsc{approx\_count\_distinct}.
-But for small scaling factors these were inaccurate even with 10\% precision, estimating the number of distinct items less in original dirty dataset.
-
+\textbf{Validation:}  
+Results validation same to local, except Spark functions are used to aggregate statistics for comparison of the generated and original dirty datasets.
 \input{content/chapter3/fig_distributed_gen}

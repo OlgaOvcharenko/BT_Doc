@@ -15,27 +15,37 @@
     \begin{tikzpicture}[]
     \node[bb, text width=13.3cm, align = center, fill=black!10](disk){Disk};
     
-    \node[bb, text width=13.3cm, align = center, fill=black!10] (hdfs) at ([yshift=-6.5cm] disk){HDFS};
+    % Background square
+    \begin{scope}[on background layer]
+        \node[bb, text width=13.5cm, text height=2.7cm, align = right, fill=black!2](local) at ([yshift=-1cm] disk){Local};
+    \end{scope}
+    
+    % Background square
+    \begin{scope}[on background layer]
+        \node[bb, text width=13.5cm, text height=5.4cm, align = right, fill=black!2](local) at ([yshift=-5.7cm] disk){Distributed};
+    \end{scope}
+    
+    \node[bb, text width=13.3cm, align = center, fill=black!10] (hdfs) at ([yshift=-7.2cm] disk){HDFS};
     
     \node[bb, anchor = west, fill=blue!30] (clean) at ([yshift=-1.cm, xshift = 1cm] disk.west) {Clean data};
     \node[bb, anchor = west, fill=red!30] (dirty) at ([yshift=-2cm, xshift = 1cm] disk.west) {Dirty data};
     
-    \node[bb, text width=2.2cm, fill=blue!30] (clean_dist) at ([yshift=-5.2cm, xshift = -0.5cm] disk) {Clean data};
+    \node[bb, text width=2.2cm, fill=blue!30] (clean_dist) at ([yshift=-6cm, xshift = -0.5cm] disk) {Clean data};
     
     \node[bb, text width=3.6cm, fill=green!10] (stats) at ([yshift=-1.7cm, xshift = -0.8cm] disk) {Statistics and error distributions};
     
-    \node[bb, text width=2.5cm, fill=blue!30] (scale_up) at ([yshift=-3.5cm, xshift = -0.5cm] disk) {Scale up \ \ \ \ \ \ \ \ \  distributed };
+    \node[bb, text width=2.5cm, fill=blue!30] (scale_up) at ([yshift=-4.5cm, xshift = -0.5cm] disk) {Scale up \ \ \ \ \ \ \ \ \  distributed };
     
-    \node[bb, text width=2.5cm, fill=red!30] (error_gen) at ([yshift=-3.5cm, xshift = -4.7cm] disk) {Error \ \ \ \ \ \ \ \ \ \ generation};
-    \node[bb, text width=2.5cm, fill=red!30] (error_tuples) at ([yshift=-5.2cm, xshift = -4.7cm] disk) {Error tuples};
+    \node[bb, text width=2.5cm, fill=red!30] (error_gen) at ([yshift=-4.5cm, xshift = -4.7cm] disk) {Error \ \ \ \ \ \ \ \ \ \ generation};
+    \node[bb, text width=2.5cm, fill=red!30] (error_tuples) at ([yshift=-6cm, xshift = -4.7cm] disk) {Error tuples};
     
     % \node[bb, fill=red!30, text width=4.0cm, anchor = east] (errors) at ([yshift=-1.7cm,xshift= -0.8cm] disk.east) {Errors generation and introduction};
     
-    \node[bb,  anchor=east, fill=green!10] (validation) at ([yshift=-1.5cm, xshift=-1.8cm] disk.east) {Validation};
+    \node[bb,  anchor=east, fill=green!10] (validation) at ([yshift=-3.3cm, xshift=-1.2cm] disk.east) {Validation};
     
-    \node[bb,  anchor=east, fill=red!30, text width = 2.5cm] (dirty_dist) at ([yshift=-3.5cm, xshift=6cm] disk) {Dirty \ \ \ \ \ \ \ distributed};
+    \node[bb,  anchor=east, fill=red!30, text width = 2.5cm] (dirty_dist) at ([yshift=-4.6cm, xshift=6cm] disk) {Dirty \ \ \ \ \ \ \ distributed};
     
-    \node[bb, anchor=east, text width=2.5cm, fill=red!30] (error_tuples_out) at ([yshift=-5.2cm, xshift = 6cm] disk) {Error tuples};
+    \node[bb, anchor=east, text width=2.5cm, fill=red!30] (error_tuples_out) at ([yshift=-6.0cm, xshift = 6cm] disk) {Error tuples};
     
     
     \draw[->] ([xshift=0.4cm]disk.south west) to[out = -90, in = 180] (clean);
@@ -60,7 +70,7 @@
     
     % \draw[->] ([]errors.east) to[out = 30, in = -90] ([xshift=-0.5cm]disk.south east);
     
-    \draw[->] ([]validation.east) to[out = 0, in = -90] ([xshift=-0.3cm]disk.south east);
+    \draw[->] ([]validation.north) to[out = 90, in = -90] ([xshift=4.5cm, yshift=-0.4cm]disk);
     
     % \draw[->] ([xshift=-0.8cm]errors.south) to[out = -90, in = 180] ([]validation.west);
     
