@@ -1,4 +1,4 @@
-\section{Data Generation Framework}
+\section{Data Generation}
 \label{sec:data_gen}
 For this framework we introduced two implementations to generate scaled up datasets: Local and distributed.
 Both implementations maintain data and error statistics. 
@@ -13,7 +13,7 @@ The framework contains full pipelines consisting of the following generalized st
     \item Generated data analysis.
 \end{itemize}
 
-\subsection{Local data generator}
+\subsection{Local Data Generation}
 \label{sec:local_generator}
 \input{content/chapter3/fig_local_gen}
 
@@ -118,7 +118,7 @@ Another limitation is the in-memory computation. This means that data can not sc
 Third, there is potential for more parallelization of different parts of the local execution. But the parts already parallelized include the critical parts.
 
 
-\subsection{Distributed data generator}
+\subsection{Distributed Data Generation}
 \label{sec:distributed_generator}
 
 \textbf{The distributed generator} is for scaling to larger sizes of data that can not fit local memory restrictions.
