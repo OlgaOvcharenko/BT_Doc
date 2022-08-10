@@ -153,7 +153,22 @@
 
 %% ... it's OK to put here your own usepackage commands ...
 %test
+\usepackage{amsmath}
+\usepackage{amssymb}
 
+
+\usepackage[np,autolanguage]{numprint}
+\usepackage{units}
+\usepackage{fontawesome}
+\usepackage{balance}
+\usepackage{algorithm}
+\usepackage[noend]{algorithmic}
+\usepackage{listings}
+\usepackage{color}
+
+% \usepackage{subfigure}
+% \usepackage{algorithm}
+% \usepackage{algpseudocode}
 
 \usepackage{soul}
 \usepackage{booktabs}
@@ -187,8 +202,18 @@
 
 %% ... it's OK to put here your own newcommand/newenvironment-definitions ...
 
+% algorithm commands
+\newcommand{\mat}[1]{\ensuremath{\mathbf{#1}}}
+\newcommand{\card}[1]{\lvert #1\rvert}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\num}[1]{\numprint{#1}}
 
-
+\renewcommand{\algorithmiccomment}[1]{\hfill \textit{// #1}}
+\newcommand{\COMMENTLINE}[1]{\STATE \textit{// #1}}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\renewcommand{\algorithmicrepeat}{\textbf{do}}
+\renewcommand{\algorithmicuntil}{\textbf{while}}
 
 \newcommand{\myLaT}{\LaTeX{}@TUG\xspace} %% LaTeX@TUG text "logo"
 

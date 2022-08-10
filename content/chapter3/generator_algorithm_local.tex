@@ -1,0 +1,75 @@
+\begin{algorithm}[!t]
+    \caption{Local Error Generation Algorithm}\label{alg:local_generator}
+    \begin{algorithmic}[1] 
+        \REQUIRE{Error distribution $\mat{err\_dist}$, scaled dataset $\mat{data}$, scaling factor $scaling\_factor$, schema of the dirty dataset $dirty\_schema$}
+	  \ENSURE{New error distribution $\mat{new\_err\_dist}$, scaled dataset $\mat{data}$}
+	  
+	  \COMMENTLINE{a) create a pool to introduce mv, typos, replacements, and indices for outliers}
+	  
+	  \STATE $\mat{pool} \leftarrow \text{Pool}(\#CPU)$
+	  \FOR{$col$ \textbf{in} $\text{data.columns}$} {
+	    \STATE $kwargs \leftarrow [\mat{\text{data}}[col], \mat{\text{err\_dist}}, \mat{\text{new\_err\_dist}}, scaling\_factor, col]$ 
+        \STATE $\text{tasks.append(\mat{pool}.apply\_async(\textsc{get\_errors\_in\_col},} kwargs\text{)}$ 
+      }\ENDFOR 
+      
+      \COMMENTLINE{b) execute tasks and modify new error distribution}
+	  \STATE $\mat{new\_err\_dist} \leftarrow \text{\textsc{ErrorDistribution}(dirty\_schema, \mat{data}.row, \mat{data}.col)}$
+	  \FOR{$task$ \textbf{in} $\text{tasks}$} {
+        \STATE $dist\_changes, col\_name, \mat{updated\_col} \leftarrow task\text{.get()}$ 
+        \STATE $\mat{new\_err\_dist}.\textsc{update}(dist\_changes, col\_name)$ 
+        \STATE $\mat{data}[col] \leftarrow \mat{updated\_col}$ 
+      }\ENDFOR 
+      
+      \COMMENTLINE{c) introduce numerical swaps}
+      \STATE $\mat{data}, \mat{new\_err\_dist} \leftarrow \textsc{add\_swaps}(\mat{data}, \mat{err\_dist}, \mat{new\_err\_dist})$ 
+      
+      \COMMENTLINE{d) introduce outliers based on indices created earlier}
+      \STATE $\mat{data}, \mat{new\_err\_dist} \leftarrow \textsc{add\_swaps}(\mat{data}, \mat{err\_dist}, \mat{new\_err\_dist})$ 
+      
+      \FOR{$col$ \textbf{in} $\text{data.columns}$} {
+        \STATE $dist\_changes, col\_name, \mat{updated\_col} \leftarrow \textsc{add\_outliers}(\mat{data}, \mat{err\_dist}, \text{new\_err\_dist.outlier\_indices})$ 
+        \STATE $\mat{new\_err\_dist}.\textsc{update}(dist\_changes, col\_name)$ 
+        \STATE $\mat{data}[col] \leftarrow \mat{updated\_col}$ 
+      }\ENDFOR 
+      
+      \COMMENTLINE{e) introduce mixed swaps}
+      \STATE $\mat{data}, \mat{new\_err\_dist} \leftarrow \textsc{add\_swaps}(\mat{data}, \mat{err\_dist}, \mat{new\_err\_dist})$ 
+      
+      \RETURN $\mat{new\_err\_dist}, \mat{data}$
+    \end{algorithmic}
+\end{algorithm}
+
+
+\begin{algorithm}[!t]
+    \caption{\textsc{get\_errors\_in\_col Algorithm}}\label{alg:local_get_errors_in_col}
+    \begin{algorithmic}[1] 
+        \REQUIRE{Error distribution $\mat{err\_dist}$, new error distribution $\mat{new\_err\_dist}$, scaled dataset $\mat{data}$, scaling factor $scaling\_factor$}
+	  \ENSURE{New error distribution $\mat{new\_err\_dist}$, scaled dataset $\mat{data}$}
+	  
+	  \STATE $\mat{pool} \leftarrow \text{Pool}(\#CPU)$
+	  \FOR{$col$ \textbf{in} $\text{data.columns}$} {
+        \STATE $\text{tasks.append(\mat{pool}.apply\_async(\textsc{get\_errors\_in\_col})}$ 
+      }\ENDFOR 
+      
+      \COMMENTLINE{b) execute tasks and modify new error distribution}
+	  \STATE $\mat{new\_err\_dist} \leftarrow \text{\textsc{ErrorDistribution}(dirty\_schema, \mat{data}.row, \mat{data}.col)}$
+	  
+      
+      \COMMENTLINE{c) introduce numerical swaps}
+      \STATE $\mat{data}, \mat{new\_err\_dist} \leftarrow \textsc{add\_swaps}(\mat{data}, \mat{err\_dist}, \mat{new\_err\_dist})$ 
+      
+      \COMMENTLINE{d) introduce outliers based on indices created earlier}
+      \STATE $\mat{data}, \mat{new\_err\_dist} \leftarrow \textsc{add\_swaps}(\mat{data}, \mat{err\_dist}, \mat{new\_err\_dist})$ 
+      
+      \FOR{$col$ \textbf{in} $\text{data.columns}$} {
+        \STATE $dist\_changes, col\_name, \mat{updated\_col} \leftarrow \textsc{add\_outliers}(\mat{data}, \mat{err\_dist}, \text{new\_err\_dist.outlier\_indices})$ 
+        \STATE $\mat{new\_err\_dist}.\textsc{update}(dist\_changes, col\_name)$ 
+        \STATE $\mat{data}[col\_name] \leftarrow \mat{updated\_col}$ 
+      }\ENDFOR 
+      
+      \COMMENTLINE{c) introduce mixed swaps}
+      \STATE $\mat{data}, \mat{new\_err\_dist} \leftarrow \textsc{add\_swaps}(\mat{data}, \mat{err\_dist}, \mat{new\_err\_dist})$ 
+      
+      \RETURN $\mat{new\_err\_dist}, \mat{data}$
+    \end{algorithmic}
+\end{algorithm}
