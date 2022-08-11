@@ -8,7 +8,7 @@
 	  
 	  \STATE $\mat{pool} \leftarrow \text{Pool}(\#CPU)$
 	  \FOR{$col$ \textbf{in} $\text{data.columns}$} {
-	    \STATE $kwargs \leftarrow [\mat{\text{data}}[col], \mat{\text{err\_dist}}, \mat{\text{new\_err\_dist}}, scaling\_factor, col]$ 
+	    \STATE $kwargs \leftarrow [\mat{data}[col], \mat{err\_dist}, \mat{new\_err\_dist}, scaling\_factor, col]$ 
         \STATE $\text{tasks.append(\mat{pool}.apply\_async(\textsc{get\_errors\_in\_col},} kwargs\text{)}$ 
       }\ENDFOR 
       
@@ -43,8 +43,31 @@
 \begin{algorithm}[!t]
     \caption{\textsc{get\_errors\_in\_col Algorithm}}\label{alg:local_get_errors_in_col}
     \begin{algorithmic}[1] 
-        \REQUIRE{Error distribution $\mat{err\_dist}$, new error distribution $\mat{new\_err\_dist}$, scaled dataset $\mat{data}$, scaling factor $scaling\_factor$}
+        \REQUIRE{Error distribution $\mat{err\_dist}$, new error distribution $\mat{new\_err\_dist}$, column data $\mat{data\_c}$, scaling factor $scaling\_factor$}
 	  \ENSURE{New error distribution $\mat{new\_err\_dist}$, scaled dataset $\mat{data}$}
+	  
+	  \COMMENTLINE{a) get typos values}
+      \STATE $\mat{new\_err\_dist}.typo\_values, num\_typos \leftarrow \textsc{get\_typos}(\mat{err\_dist})$ 
+	  
+	  \COMMENTLINE{b) get missing values}
+      \STATE $\mat{new\_err\_dist}.mv\_values, num\_mv \leftarrow \textsc{get\_mv}(\mat{err\_dist})$ 
+      
+      \COMMENTLINE{c) introduce replacements}
+      \STATE $\mat{new\_err\_dist}.replacements\_indices \leftarrow \textsc{add\_replacements}( \mat{data\_c},  \mat{err\_dist})$ 
+      
+      \COMMENTLINE{d) count number of outliers}
+      \STATE $\mat{new\_err\_dist}.num\_outliers \leftarrow \mat{err\_dist} \cdot scaling\_factor$ 
+      
+      \COMMENTLINE{e) get random indices}
+      \STATE $size \leftarrow \mat{new\_err\_dist}.num\_mv + \mat{new\_err\_dist}.num\_outliers + \mat{new\_err\_dist}.num\_typos$ 
+      
+      \STATE $ind \leftarrow \textsc{random\_sample\_except}(\mat{data\_c}.nrow, size, \mat{new\_err\_dist}.replacements\_indices)$ 
+      
+	  \COMMENTLINE{e) modify column with errors}
+	  \STATE $data\_c \leftarrow \textsc{add\_errors}(\mat{data\_c}, ind, \mat{new\_err\_dist}.replacements\_indices)$ 
+	  
+	  
+	  
 	  
 	  \STATE $\mat{pool} \leftarrow \text{Pool}(\#CPU)$
 	  \FOR{$col$ \textbf{in} $\text{data.columns}$} {
