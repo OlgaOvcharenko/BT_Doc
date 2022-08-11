@@ -17,6 +17,8 @@ The framework contains full pipelines consisting of the following generalized st
 \label{sec:local_generator}
 \input{content/chapter3/fig_local_gen}
 
+\input{content/chapter3/generator_algorithm_local}
+
 First, for scaling to in-memory sizes there is a local data generator execution that consists of the following steps that are also shown in Figure~\ref{fig:data_gen_local}:
 
 \textbf{Read:} 
@@ -31,13 +33,13 @@ Therefore, for the clean data, custom schema detection is applied. A sample of t
 
 \textbf{Error analysis:} 
 Error analysis is performed on the clean and dirty datasets together.
-First, distinct values of actual data are aggregated, and a binary difference mask of clean and dirty datasets is created.
+First, distinct values of actual data are aggregated, and a binary mask of differences between clean and dirty datasets is created.
 The mask allows the framework to know the ratio and exact number of errors introduced in each feature, and to track detected and undetected errors. 
 Errors are analyzed in a particular sequence, since if cell was classified as error of one type, it can not contain any other error types, this is based on the simplifying assumption that there are no compound errors.
 First, missing values are detected using the Pandas \textsc{isnull()} method. 
 Second, outliers are detected by interquartile range (IQR), shown in Formula~\ref{eq:is_outlier_iqr}, and by distribution, shown in Formula~\ref{eq:is_outlier_std}. 
 Formula~\ref{eq:is_outlier_iqr} uses IQR, Formula~\ref{eq:outlier_iqr}, to define lower and upper limits, while Formula~\ref{eq:is_outlier_std} relies on standard deviation, Formula~\ref{eq:std}. 
-Lower and upper limits are saved, and then reused during error generation. 
+Lower and upper limits are stored, and then reused during error generation. 
 Third, dirty data is inspected for replacements. 
 Replacements are cells that differ from the clean dataset, but still belong to a clean distinct values set.
 Fourth, to find swaps between features, the framework computes row sums utilizing the binary difference mask. 
@@ -79,27 +81,29 @@ For instance, in a column with all unique values, the probability of selecting a
 It is similar to the rolling dice with 6 unique sides. 
 Scaling to 2x is equivalent to rolling 6 unique sides at least once with 12 trials.
 To avoid this inconsistency, it was chosen to scale up by replication. 
-If the scaling factor is greater is a floating point number, then the integer part is replicated, and the remaining floating part is sampled randomly from the clean data.
+If the scaling factor is a floating point number, then the integer part is replicated, and the remaining floating part is sampled randomly from the clean data.
 
 \textbf{Error generation and introduction:} 
-Error generation and introduction is done column wise. 
+Error generation and introduction is done column wise, and is presented in Algorithm~\ref{alg:local_generator}. 
 Since the main workload of the framework is in this phase, each column is processed in parallel, with the exception of multi column errors such as swaps.
-Typos, missing values and replacements are added to the scaled dataset in the first iteration.
-For missing values and typos the distinct items sets and frequencies are gathered from the error analysis and statistics phases. 
-Existing missing values and typos frequencies are scaled by scaling factor. Additionally, a specific number of new unique values is generated, this number is estimated as described in Scaling up.
+Typos, missing values and replacements are added to the scaled dataset in the first iteration as shown in Algorithm~\ref{alg:local_get_errors_in_col}.
+For missing values and typos the distinct item sets and frequencies are gathered from the error analysis and statistics phases. 
+Existing missing value and typo frequencies are scaled by scaling factor. Additionally, a specific number of new unique values is generated, this number is estimated as described in Scaling up.
 The number of occurrences of a new unseen unique value is computed similar to n-gram smoothing techniques. 
 The new frequency of unseen values is defined by Laplace smoothing "add-one" to avoid the zero-frequency problem.
 The zero-frequency problem: If an individual class label is missing, then the frequency-based probability estimate will be zero.
 To introduce the errors into the data, a vector with shuffled random indices is allocated and then utilized. 
-For each unique error type a slice of indices is extracted and then apply to the scaled dataset.
+For each unique error type a slice of indices is extracted and then applied to the scaled dataset.
 Replacements are added using earlier created dictionaries of original and replaced values, and their frequencies.
 Cells to modify are filtered, then a sub-fraction is randomly sampled and corrupted.
-Since replacements do not introduce new distinct items, no additional computations are necessary. 
+Since replacements do not introduce new distinct items, no additional computations are necessary.
 Similarly, swaps are done by filtering two columns and randomly choosing rows to exchange. 
 The number of rows to modify is computed from the original number of swaps and scaling factor.
+To choose not already modified values for replacements and swaps, indices of modified cells are stored and then \textsc{random\_except} method is used.
+This method returns random row indices that are not in the given list of indices.
 The last step is the addition of outliers. 
 They are applied at the end of the sequence because, if applied correctly, they can scale the mean of the new scaled dataset to the desired dirty mean through the technique described in Section~\ref{sec:error_types}. 
-
+Outliers are also introduced to columns in parallel manner, Algorithm~\ref{alg:local_generator}.
 
 \textbf{Write:}  
 The freshly generated dataset is saved immediately after the error generation. It is written to the disk in comma-separated values (CSV) format. 
@@ -115,7 +119,7 @@ Additionally, all statistics are saved to files.
 
 \textbf{Limitations of the local execution:} 
 The Pandas DatFrames are relatively slow. Pandas is written C, and switching between C and Python takes time, especially for mathematical computations and data retrieval.
-Another limitation is the in-memory computation. This means that data can not scale above aggregated memory of a single machine.
+Another limitation is the in-memory computation. This means that data can not be scaled above aggregated memory of a single machine.
 Third, there is potential for more parallelization of different parts of the local execution. But the parts already parallelized include the critical parts.
 
 
@@ -145,8 +149,8 @@ Finally, Spark \textsc{explode} utilizes these lists to "explode" (replicate) ro
 
 \textbf{Error generation:} 
 Erroneous values are generated locally using error characteristics collected from the original dirty dataset.
-The values are combined with row indices to create new error locations.
-Indices are chosen at random for missing values, typos and outliers, or based on the filtering of specific values for replacements and swaps.
+The values are combined with row indices to create new error locations, Algorithm~\ref{alg:dist_generator}.
+Indices are chosen at random for missing values, typos and outliers, Algorithm~\ref{alg:local_get_errors_in_col_dist}, or based on the filtering of specific values for replacements and swaps.
 A challenging part here is to guarantee that indices are non-intersecting. 
 To achieve this property, replacements are performed first, and afterwards random indices for other errors are chosen, avoiding already used indices.
 This process is parallelized to write buffered strings of error tuples to HDFS, materializing and persisting the errors introduced in the scaled dataset.
@@ -160,5 +164,4 @@ However, utilizing Spark compression and parquet format reduced runtime signific
 \textbf{Validation:}  
 Results validation same to local, except Spark functions are used to aggregate statistics for comparison of the generated and original dirty datasets.
 \input{content/chapter3/fig_distributed_gen}
-
-\input{content/chapter3/generator_algorithm_local}
+\input{content/chapter3/generator_algorithm_distributed}

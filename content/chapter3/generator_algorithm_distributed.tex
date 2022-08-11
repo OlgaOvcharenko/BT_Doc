@@ -1,0 +1,67 @@
+\begin{algorithm}[!t]
+    \caption{Distributed Error Generation Algorithm}\label{alg:dist_generator}
+    \begin{algorithmic}[1] 
+        \REQUIRE{Error distribution $\mat{err\_dist}$, scaled dataset $\mat{data}$, scaling factor $scaling\_factor$, schema of the dirty dataset $dirty\_schema$}
+	  \ENSURE{New error distribution $\mat{new\_err\_dist}$, scaled dataset $\mat{data}$}
+	  
+	  \STATE $\mat{new\_err\_dist} \leftarrow \text{\textsc{ErrorDistribution}(dirty\_schema, \mat{data}.row, \mat{data}.col)}$
+	  
+	  \COMMENTLINE{a) introduce replacements}
+	  
+	  \STATE $\mat{pool} \leftarrow \text{Pool}(\#CPU)$
+	  \FOR{$col$ \textbf{in} $\text{data.columns}$} {
+        \STATE $\mat{new\_err\_dist}.rep\_indices, \mat{new\_err\_dist} \leftarrow \textsc{create\_replacements\_write\_and\_join}(\mat{data}, \mat{err\_dist}, \mat{new\_err\_dist})$ 
+      }\ENDFOR
+	  
+	  \COMMENTLINE{b) create a pool to write files with mv, typos, and outliers}
+	  
+	  \STATE $\mat{pool} \leftarrow \text{Pool}(\#CPU)$
+	  \FOR{$col$ \textbf{in} $\text{data.columns}$} {
+	    \STATE $kwargs \leftarrow [\mat{err\_dist}, \mat{new\_err\_dist}, scaling\_factor, col]$ 
+        \STATE $\text{tasks.append(\mat{pool}.apply\_async(\textsc{get\_errors\_in\_col\_dist},} kwargs\text{)}$ 
+      }\ENDFOR 
+      
+      \COMMENTLINE{b) execute tasks and modify new error distribution}
+	  \FOR{$task$ \textbf{in} $\text{tasks}$} {
+        \STATE $dist\_changes, col\_name \leftarrow task\text{.get()}$ 
+        \STATE $\mat{new\_err\_dist}.\textsc{update}(dist\_changes, col\_name)$ 
+      }\ENDFOR 
+      
+      \COMMENTLINE{c) read files with errors and join into data}
+      \STATE $\textsc{read\_errors\_and\_join}(\mat{data}, \mat{new\_err\_dist})$ 
+      
+      \COMMENTLINE{d) introduce swaps}
+      \STATE $\mat{data}, \mat{new\_err\_dist} \leftarrow \textsc{create\_swaps\_write\_and\_join}(\mat{data}, \mat{err\_dist}, \mat{new\_err\_dist})$ 
+      
+      \RETURN $\mat{new\_err\_dist}, \mat{data}$
+    \end{algorithmic}
+\end{algorithm}
+
+
+\begin{algorithm}[!t]
+    \caption{\textsc{get\_errors\_in\_col\_dist Algorithm}}\label{alg:local_get_errors_in_col_dist}
+    \begin{algorithmic}[1] 
+        \REQUIRE{Error distribution $\mat{err\_dist}$, new error distribution $\mat{new\_err\_dist}$, scaling factor $scaling\_factor$}
+	  \ENSURE{New error distribution $\mat{new\_err\_dist}$, column name $col$}
+	  
+	  \COMMENTLINE{a) get typos values}
+      \STATE $\mat{new\_err\_dist}.typo\_values, num\_typos \leftarrow \textsc{get\_typos}(\mat{err\_dist})$ 
+	  
+	  \COMMENTLINE{b) get missing values}
+      \STATE $\mat{new\_err\_dist}.mv\_values, num\_mv \leftarrow \textsc{get\_mv}(\mat{err\_dist})$ 
+      
+      \COMMENTLINE{d) count number of outliers}
+      \STATE $\mat{new\_err\_dist}.outliers\_values, num\_outliers \leftarrow \textsc{get\_outliers}(\mat{err\_dist})$ 
+      
+      \COMMENTLINE{e) get random indices}
+      \STATE $size \leftarrow \mat{new\_err\_dist}.num\_mv + \mat{new\_err\_dist}.num\_outliers + \mat{new\_err\_dist}.num\_typos$ 
+      
+      \STATE $ind \leftarrow \textsc{random\_sample\_except}($
+      \STATE $\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mat{data\_c}.nrow, size, \mat{new\_err\_dist}.replacements\_indices)$ 
+      
+	  \COMMENTLINE{e) write to file tuples of indices and errors}
+	  \STATE $\textsc{write\_ind\_err\_to\_file}(ind, \mat{new\_err\_dist})$ 
+	  
+      \RETURN $\mat{new\_err\_dist}, col$
+    \end{algorithmic}
+\end{algorithm}

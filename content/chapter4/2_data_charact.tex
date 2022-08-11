@@ -8,11 +8,12 @@ Additionally, statistics and error characteristics of datasets are discussed.
 
 \input{content/chapter4/datasets_table}
 
-To evaluate the performance of the benchmark, six public datasets were used from \textcite{MahdaviAFMQST2019, MahdaviA2020} and available on GitHub~\footnote{\url{https://github.com/BigDaMa/raha/tree/master/datasets}}.
+To evaluate the performance of the benchmark, six public datasets were used from \textcite{MahdaviAFMQST2019, MahdaviA2020}. 
+They are available on GitHub~\footnote{\url{https://github.com/BigDaMa/raha/tree/master/datasets}}.
 All datasets have a clean and dirty version.
 In Table~\ref{tab:datasets_table} datasets and their main characteristics are presented.
 
-\textbf{Beers} is a real-world dataset. It has been collected by web scraping, and was cleaned manually.
+\textbf{Beers} is a real-world dataset. It has been collected by web scraping, and was cleaned manually by owners.
 It is used in \textcite{MahdaviAFMQST2019, MahdaviA2020},
 and the source can be be tracked to \textcite{Hould2017WEB, Hould2017KAGGLE}. 
 The dataset contains information about different beer sorts, respective bottles and their producers.
@@ -22,35 +23,35 @@ It is used in many projects \cite{holodetect, raha, LiDLMS2015}.
 This dataset contains information on arrival and departure of flights.
 The source of this dataset is \textcite{LiDLMS2015}.
 
-\textbf{Hospital} data is taken from US Department of Health \& Human Services~\footnote{\url{http://www.hospitalcompare.hhs.gov} (Not working anymore)}. 
+\textbf{Hospital} data is taken from US Department of Health \& Human Services~\footnote{\url{http://www.hospitalcompare.hhs.gov}}. 
 It is frequently used \cite{RestatGCS2022, ChuIP2013, DallachiesaEEEIOT2013, HeidariMIR2019,MahdaviAFMQST2019, MahdaviA2020, RekatsinasCIR2017}.
 The dataset contains information about providers, their addresses, contacts and measurements they do.
-In the experiments, a fraction of the whole dataset is used.
+In the experiments, a fraction of the whole dataset was used.
 The fraction is published in GitHub~\footnote{\url{https://github.com/BigDaMa/raha/tree/master/datasets}}.
 
-Both, \textit{flights} and \textit{hospital}, were obtained along with ground truth from \textcite{holodetect}.
+Both \textit{flights} and \textit{hospital}, were obtained along with ground truth from \textcite{holodetect}.
 
 \textbf{Movies} is a dataset that is available in the Magellan repository~\cite{DasDGGKGP2016, KondaDSDABLPZNPKDR2016}.
 It was collected by web scraping Rotten Tomatoes~\footnote{\url{https://www.rottentomatoes.com/}} and IMBD~\footnote{\url{https://www.imdb.com/}}.
-The data describes movies, their cast and ratings. 
-Interestingly, one of the columns is \textsc{description} that is free text.
+The dataset describes movies, their casts and ratings. 
+Interestingly, one of the columns is \textsc{description} free text.
 
 \textbf{Rayyan} is also a real-world dataset. 
 It was cleaned by the owners~\cite{QuzzaniHFE2016} themselves, and is used in \textcite{MahdaviAFMQST2019, MahdaviA2020}.
-The dataset summarizes articles, their characteristics such as publisher, volume, language etc.
+The dataset summarizes articles, as well as their characteristics such as publisher, volume, language.
 
 \textbf{Tax} is a large synthetically created dataset from the BART~\cite{bart} repository.
-It summarize information about tax payers and personal information that is important for the tax estimation.
+It summarizes information about tax payers and their personal information that is important for the tax estimation.
 
 \subsection{Data and error characteristics}
 \label{sec:data_characteristics}
 Main goals during data generation is to maintain error characteristics and  statistics of the original dirty dataset in the generated dirty dataset.
-In this Section the characteristics of the original dirty input and the clean data is discussed and explained. 
+In this Section the characteristics of the original dirty input and the clean data are discussed and explained. 
 
 \textbf{The main objective} is preservation of distinct values, min, max, mean, and distributions of typos, missing values, outliers, replacements and swaps.
 These aggregate statistics are important because they contain information about every value.
 For instance, mean shows presence of outliers or missing values.
-Similarly, maintenance of frequencies of distinct values allows one to preserve error and data distribution while scaling up.
+Similarly, maintenance of frequencies of distinct values allows one to preserve error and data distribution while scaling.
 
 \textbf{The error distribution} of the different datasets is presented in Table~\ref{tab:dirty_num_errors}. 
 Graphical representations of the errors include: The percentages of different error types in each dataset are shown in Figure~\ref{exp:errors_percent} and count - in Figure~\ref{exp:errors_count}.
@@ -90,12 +91,12 @@ There are also not many swaps in the given data, although this is a common mista
 \begin{tabular}{r|K|K|K|K|K}
 \toprule
                      & \colCenter{Outliers} & \colCenter{Typos} & \colCenter{MV}             & \colCenter{Rep}              & \colCenterNoRight{Swaps}   \\ \midrule
-beers                & 0        & 254   & 4170           & 0                & 0       \\
-flights              & 0        & 4606  & 0              & 314              & 0       \\
-hospital             & 0        & 417   & 92             & 0                & 0       \\
-movies               & 0        & 982   & 6346           & 141              & 0       \\
-rayyan               & 0        & 649   & 75             & 224              & 0       \\
-tax                  & 2        & 1367  & 588            & 1200             & 4       \\ \bottomrule
+beers                & \numprint{0}        & \numprint{254}   & \numprint{4170}           & \numprint{0}                & \numprint{0}       \\
+flights              & \numprint{0}        & \numprint{4606}  & \numprint{0}              & \numprint{314}              & \numprint{0}       \\
+hospital             & \numprint{0}        & \numprint{417}   & \numprint{92}             & \numprint{0}                & \numprint{0}       \\
+movies               & \numprint{0}        & \numprint{982}  & \numprint{6346}           & \numprint{141}              & \numprint{0}       \\
+rayyan               & \numprint{0}        & \numprint{649}   & \numprint{75}             & \numprint{224}              & \numprint{0}       \\
+tax                  & \numprint{0}        & \numprint{1367}  & \numprint{588}            & \numprint{1200}             & \numprint{4}       \\ \bottomrule
 \end{tabular}
 \end{table}
 
@@ -153,9 +154,10 @@ This happens because of a high amount of typos in both datasets.
 \textbf{Scaling error distribution} is shown for \textit{tax} in Table~\ref{tab:local_errors_tax}, other datasets are described in Appendix~\ref{apendix:error_counts_scaling}. 
 In the Table row 1 is the error distribution of original dirty data.
 It is guaranteed that errors scale linearly within 10\% of original number of errors.
-It can be observed that there is no necessity in 10\% bound for local execution since number of errors is perfectly matching the expected.
-
+It can be observed that there is no necessity in 10\% bound for local execution since number of errors is perfectly matching the expected. 
 % TODO compare to distributed
+This is the case in both local and distributed data generators. 
+
 
 \begin{table}[!t]
 \caption{\label{tab:local_errors_tax} Local error distribution in tax}
@@ -163,15 +165,15 @@ It can be observed that there is no necessity in 10\% bound for local execution 
 \begin{tabular}{r|K|K|K|K|K}
 \toprule
 \colCenter{Scale} & \colCenter{Outliers} & \colCenter{Typos} & \colCenter{MV} & \colCenter{Rep} & \colCenterNoRight{Swaps}  \\ \midrule
- 1  &   2 &   1367 &    588 &    1200 &    4 \\
- 2  &   4 &   2734 &   1176 &    2400 &    8 \\
- 4  &   8 &   5468 &   2352 &    4800 &   16 \\
- 8  &  16 &  10936 &   4704 &    9600 &   32 \\
-16  &  32 &  21842 &   9408 &   19200 &   64 \\
-32  &  64 &  43744 &  18816 &   38400 &  128 \\
-64  & 128 &  87488 &  37632 &   76800 &  256 \\
-128 & 256 & 174976 &  75264 &  153600 &  512 \\
-256 & 512 & 349952 & 150528 &  307200 & 1024 \\
+ \numprint{1}  &   \numprint{2} &   \numprint{1367} &    \numprint{588} &    \numprint{1200} &    \numprint{4} \\
+ \numprint{2}  &   \numprint{4} &   \numprint{2734} &   \numprint{1176} &    \numprint{2400} &    \numprint{8} \\
+ \numprint{4}  &   \numprint{8} &   \numprint{5468} &   \numprint{2352} &    \numprint{4800} &   \numprint{16} \\
+ \numprint{8}  &  \numprint{16} &  \numprint{10936} &   \numprint{4704} &    \numprint{9600} &   \numprint{32} \\
+\numprint{16}  &  \numprint{32} &  \numprint{21842} &   \numprint{9408} &   \numprint{19200} &   \numprint{64} \\
+\numprint{32}  &  \numprint{64} &  \numprint{43744} &  \numprint{18816} &   \numprint{38400} &  \numprint{128} \\
+\numprint{64}  & \numprint{128} &  \numprint{87488} &  \numprint{37632} &   \numprint{76800} &  \numprint{256} \\
+\numprint{128} & \numprint{256} & \numprint{174976} &  \numprint{75264} &  \numprint{153600} &  \numprint{512} \\
+\numprint{256} & \numprint{512} & \numprint{349952} & \numprint{150528} &  \numprint{307200} & \numprint{1024} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -194,14 +196,14 @@ Since some errors are introduced at random, it is expected that estimation sligh
 \toprule
                & \multicolumn{2}{c|}{\textbf{Typos}}   & \multicolumn{2}{c|}{\textbf{MV}} &   \multicolumn{1}{c||}{\textbf{Outliers}} &  \multicolumn{2}{c}{\textbf{Distinct}}\\
 \colCenter{Scale} & \colCenter{Est} & \colCenter{Act} &  \colCenter{Est} & \colCenter{Act} & \multicolumn{1}{c||}{\textbf{{Act}}} & \colCenter{Est}   & \colCenterNoRight{Act}   \\ \midrule
-1              & 81  & 81    & 6    & 6    &  2  & 275201   & 275201   \\
-2              & 83  & 83    & 9    & 11   &  4  & 275260   & 275257   \\
-4              & 84  & 84    & 15   & 16   &  4  & 275271   & 275261   \\
-8              & 86  & 86    & 27   & 22   &  5  & 275293   & 275272   \\
-16             & 89  & 89    & 51   & 28   &  5  & 275336   & 275286   \\
-32             & 96  & 96    & 89   & 29   &  8  & 275413   & 275296   \\
-64             & 107 & 107   & 138  & 23   &  12 & 275537   & 275306   \\ 
-128            & 129 & 129   & 264  & 22   &  32 & 275813   & 275332   \\
+\numprint{1}              & \numprint{81}  & \numprint{81}    & \numprint{6}    & \numprint{6}    &  \numprint{2}  & \numprint{275201}   & \numprint{275201}   \\
+\numprint{2}              & \numprint{83}  & \numprint{83}    & \numprint{9}    & \numprint{11}   &  \numprint{4}  & \numprint{275260}   & \numprint{275257}   \\
+\numprint{4}              & \numprint{84}  & \numprint{84}    & \numprint{15}   & \numprint{16}   &  \numprint{4}  & \numprint{275271}   & \numprint{275261}   \\
+\numprint{8}              & \numprint{86}  & \numprint{86}    & \numprint{27}   & \numprint{22}   &  \numprint{5}  & \numprint{275293}   & \numprint{275272}   \\
+\numprint{16}             & \numprint{89}  & \numprint{89}    & \numprint{51}   & \numprint{28}   &  \numprint{5}  & \numprint{275336}   & \numprint{275286}   \\
+\numprint{32}             & \numprint{96}  & \numprint{96}    & \numprint{89}   & \numprint{29}   &  \numprint{8}  & \numprint{275413}   & \numprint{275296}   \\
+\numprint{64}             & \numprint{107} & \numprint{107}   & \numprint{138}  & \numprint{23}   &  \numprint{12} & \numprint{275537}   & \numprint{275306}   \\ 
+\numprint{128}            & \numprint{129} & \numprint{129}   & \numprint{264}  & \numprint{22}   &  \numprint{32} & \numprint{275813}   & \numprint{275332}   \\
 \bottomrule
 \end{tabular}
 \end{table}
