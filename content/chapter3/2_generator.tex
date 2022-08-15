@@ -1,16 +1,16 @@
 \section{Data Generation}
 \label{sec:data_gen}
-For this framework we introduced two implementations to generate scaled up datasets: Local and distributed.
+For our data generation framework, we introduce two implementations to generate scaled up datasets: Local and distributed.
 Both implementations maintain data and error statistics. 
 The framework contains full pipelines consisting of the following generalized steps:
 
 \begin{itemize}
     \item Read clean and dirty data.
     \item Data analysis and error classification.
-    \item Scale up clean data.
-    \item Generate errors and introduce to clean.
+    \item Scale up the clean data by replication.
+    \item Generate errors and merge with the scaled clean data.
     \item Save generated dirty dataset.
-    \item Generated data analysis.
+    \item Generate validation report.
 \end{itemize}
 
 \subsection{Local Data Generation}
@@ -23,19 +23,20 @@ First, for scaling to in-memory sizes there is a local data generator execution 
 
 \textbf{Read:} 
 Reading of clean and dirty datasets is done via Pandas DataFrames. 
-Pandas is chosen for its' flexibility, large API and ease of coding. 
-An important part of the reading is detecting a schema.
+Pandas is chosen for its flexibility, rich API and simplicity. 
+An important part of the reading is detecting the schema.
 Pandas has a schema detection that allows reading dirty data while handling features with different data types. 
-Python in general supports collections are allowed to contain heterogeneous data types. 
-These properties together allow creation of a save schema for the dirty data.
-But the automatic schema detection is not always precise, and integer cases can be detected as floats. 
-Therefore, for the clean data, custom schema detection is applied. A sample of the data is extracted and analysed for fine-grained data types. 
+Python in general supports collections that may contain heterogeneous data types. 
+These properties together allow the creation of a save schema for the dirty data.
+On the other hand, the automatic schema detection is not always precise, and integer cases can be detected as floats. 
+Therefore, for the clean data, custom schema detection is applied. 
+A sample of the data is extracted and analyzed for fine-grained data types. 
 
 \textbf{Error analysis:} 
 Error analysis is performed on the clean and dirty datasets together.
-First, distinct values of actual data are aggregated, and a binary mask of differences between clean and dirty datasets is created.
+First, distinct values of actual data are aggregated, and a binary mask (of dirty dataset dimension) of differences between clean and dirty datasets is created.
 The mask allows the framework to know the ratio and exact number of errors introduced in each feature, and to track detected and undetected errors. 
-Errors are analyzed in a particular sequence, since if cell was classified as error of one type, it can not contain any other error types, this is based on the simplifying assumption that there are no compound errors.
+Errors are analyzed in a particular sequence, since if a cell was classified as error of one type, it can not contain any other error types, this is based on the simplifying assumption that there are no compound errors.
 First, missing values are detected using the Pandas \textsc{isnull()} method. 
 Second, outliers are detected by interquartile range (IQR), shown in Formula~\ref{eq:is_outlier_iqr}, and by distribution, shown in Formula~\ref{eq:is_outlier_std}. 
 Formula~\ref{eq:is_outlier_iqr} uses IQR, Formula~\ref{eq:outlier_iqr}, to define lower and upper limits, while Formula~\ref{eq:is_outlier_std} relies on standard deviation, Formula~\ref{eq:std}. 
@@ -44,7 +45,7 @@ Third, dirty data is inspected for replacements.
 Replacements are cells that differ from the clean dataset, but still belong to a clean distinct values set.
 Fourth, to find swaps between features, the framework computes row sums utilizing the binary difference mask. 
 For rows with more than 2 errors, faulty cells are checked for swaps using an all-pairs comparison of dirty cells with clean values. 
-For easiness during error generation, swaps are divided into numerical (between 2 numerical features) and mixed (between string and any other feature), since swaps between string and numerical features violate schema integrity.
+For simplicity during error generation, swaps are divided into numerical (between 2 numerical features) and mixed (between string and any other feature), since swaps between string and numerical features violate schema integrity.
 Finally, all remaining erroneous \emph{string} feature values are classified as a typo.
 
 \begin{equation}
@@ -54,33 +55,33 @@ Finally, all remaining erroneous \emph{string} feature values are classified as 
 
 \begin{equation}
 \label{eq:is_outlier_iqr}
-\textsc{IQRO}(v) =  v < \textsc{Q}(0.25) - 1.5 \cdot \textsc{IQR} \ \cap \  v >  \textsc{Q}(0.75) + 1.5 \cdot \textsc{IQR}
+\textsc{IQRO}(v) =  v < \textsc{Q}(0.25) - 1.5 \cdot \textsc{IQR} \ \cup \  v >  \textsc{Q}(0.75) + 1.5 \cdot \textsc{IQR}
 \end{equation}
 
 \begin{equation}
     \label{eq:std}
-    \textsc{STD}(a) = \sqrt{\overline{|a - \overline{a}|^2}} 
+    \textsc{STD}(x) = \sqrt{\frac{\sum_{i=1}^{N}(x_{i}-\mu)^{2}}{N}}
 \end{equation}
 
 \begin{equation}
 \label{eq:is_outlier_std}
-\textsc{STDO(v)} = v < \overline{a} - 3 \cdot \textsc{STD} \ \cap \ v > \overline{a} + 3 \cdot \textsc{STD} 
+\textsc{STDO(v)} = v < \overline{a} - k \cdot \textsc{STD} \ \cup \ v > \overline{a} + k \cdot \textsc{STD} 
 \end{equation}
 
 \textbf{Analysis of statistical properties:} 
-Statistics analysis is performed by computation of univariate statistics such as min, max, mean, variance, kurtosis and skeweness are computed for both clean and dirty datasets.
+Statistics analysis is performed by computing univariate statistics such as min, max, mean, variance, kurtosis and skeweness are computed for both clean and dirty datasets.
 When scaling the dataset, the framework strives towards maintaining these statistics at two steps.
 First, when scaling the clean dataset, the statistics of the clean dataset are maintained. 
 Second, when introducing errors, the detected errors and their distribution are preserved.
 To reflect a realistic dataset, Schlosser~\cite{HassNSS1995} and Hasso Stokes~\cite{HassS1998} distinct item estimators are used. 
-The dirty dataset is used as a sample of the generated. It is assumed that depending on the distribution of the distinct errors in the dirty dataset, more or a equivalent number of distinct values are introduced when scaling the data.
+The dirty dataset is used as a sample of the generated. It is assumed that depending on the distribution of the distinct errors in the dirty dataset, more or an equivalent number of distinct values are introduced when scaling the data.
 
 \textbf{Scaling up:} 
 Scaling up clean data while preserving statistics is challenging, especially if applied at random. 
 For instance, in a column with all unique values, the probability of selecting all values at least once is low when scaling factor is small. 
 It is similar to the rolling dice with 6 unique sides. 
 Scaling to 2x is equivalent to rolling 6 unique sides at least once with 12 trials.
-To avoid this inconsistency, it was chosen to scale up by replication. 
+To avoid this inconsistency, we chose to scale up by replication. 
 If the scaling factor is a floating point number, then the integer part is replicated, and the remaining floating part is sampled randomly from the clean data.
 
 \textbf{Error generation and introduction:} 
@@ -88,12 +89,14 @@ Error generation and introduction is done column wise, and is presented in Algor
 Since the main workload of the framework is in this phase, each column is processed in parallel, with the exception of multi column errors such as swaps.
 Typos, missing values and replacements are added to the scaled dataset in the first iteration as shown in Algorithm~\ref{alg:local_get_errors_in_col}.
 For missing values and typos the distinct item sets and frequencies are gathered from the error analysis and statistics phases. 
-Existing missing value and typo frequencies are scaled by scaling factor. Additionally, a specific number of new unique values is generated, this number is estimated as described in Scaling up.
+To maintain the frequencies of missing values and typos, existing values are scaled up, and number of new missing values and typos is estimated by Schlosser \cite{HassNSS1995} and Hasso Stokes \cite{HassS1998} estimation algorithms.
+Existing missing value and typo frequencies are scaled by the scaling factor. 
+Additionally, a specific number of new unique values is generated, this number is estimated as described in the previous paragraph.
 The number of occurrences of a new unseen unique value is computed similar to n-gram smoothing techniques. 
 The new frequency of unseen values is defined by Laplace smoothing "add-one" to avoid the zero-frequency problem.
 The zero-frequency problem: If an individual class label is missing, then the frequency-based probability estimate will be zero.
 To introduce the errors into the data, a vector with shuffled random indices is allocated and then utilized. 
-For each unique error type a slice of indices is extracted and then applied to the scaled dataset.
+For each unique error type a random sample of indices is extracted and then applied to the scaled dataset.
 Replacements are added using earlier created dictionaries of original and replaced values, and their frequencies.
 Cells to modify are filtered, then a sub-fraction is randomly sampled and corrupted.
 Since replacements do not introduce new distinct items, no additional computations are necessary.
@@ -103,30 +106,31 @@ To choose not already modified values for replacements and swaps, indices of mod
 This method returns random row indices that are not in the given list of indices.
 The last step is the addition of outliers. 
 They are applied at the end of the sequence because, if applied correctly, they can scale the mean of the new scaled dataset to the desired dirty mean through the technique described in Section~\ref{sec:error_types}. 
-Outliers are also introduced to columns in parallel manner, Algorithm~\ref{alg:local_generator}.
+Outliers are also introduced to columns in a parallel manner, Algorithm~\ref{alg:local_generator}.
 
 \textbf{Write:}  
-The freshly generated dataset is saved immediately after the error generation. It is written to the disk in comma-separated values (CSV) format. 
-Dataset is saved before validation to ensure that we have the generated data, even if validation fails or concludes invalid generation.
+The generated dataset is saved immediately after the error generation. It is written to the disk in comma-separated values (CSV) format. 
+The dataset is saved before validation to ensure that we have the generated data, even if validation fails or concludes invalid generation.
 
 
 \textbf{Validation:} 
-The last stage of the framework is validation of generated dataset. It is done by comparing the statistics of the original dirty and generated datasets, the details are described in Section~\ref{sec:validation}.
+The last stage of the framework is the validation of the generated dataset. 
+It is done by comparing the statistics of the original dirty and generated datasets, the details are described in Section~\ref{sec:validation}.
 The error distribution of the generated dataset is stored while generating and introducing the errors.
 The univariate statistics are computed after the full generation is finished.
 Both univariate statistics and error distribution are used for the validation. 
 Additionally, all statistics are saved to files.
 
 \textbf{Limitations of the local execution:} 
-The Pandas DatFrames are relatively slow. Pandas is written C, and switching between C and Python takes time, especially for mathematical computations and data retrieval.
-Another limitation is the in-memory computation. This means that data can not be scaled above aggregated memory of a single machine.
-Third, there is potential for more parallelization of different parts of the local execution. But the parts already parallelized include the critical parts.
+The Pandas DataFrames are relatively slow. Pandas is written in C, and switching between C and Python takes time, especially for mathematical computations and data retrieval.
+Another limitation is the in-memory computation. This means that data can not be scaled above memory of a single machine.
+Third, there is potential for more parallelization of different parts of the local execution, but the parts already parallelized include the critical parts.
 
 
 \subsection{Distributed Data Generation}
 \label{sec:distributed_generator}
 
-The distributed generator is for scaling to larger sizes of data that can not fit local memory restrictions.
+The distributed generator is for scaling to larger sizes of data that exceeds local memory restrictions.
 It consists of the following steps that are also shown in Figure~\ref{fig:data_gen_dist}:
 
 \textbf{Read:} 
@@ -137,7 +141,7 @@ The schema applied to the Spark DataFrame is obtained from a schema detection of
 This is important to avoid schema violations while introducing different from data types into clean feature.  
 For instance, swaps can be introduced between numerical and string columns.
 
-\textbf{Error analysis and statistics: } This step is equivalent to the local.
+\textbf{Error analysis and statistics: } This step is equivalent to the local execution.
 
 \textbf{Distributed scaling up:}
 Scaling of the dataset in distributed mode is achieved via three different phases. 
@@ -155,13 +159,13 @@ A challenging part here is to guarantee that indices are non-intersecting.
 To achieve this property, replacements are performed first, and afterwards random indices for other errors are chosen, avoiding already used indices.
 This process is parallelized to write buffered strings of error tuples to HDFS, materializing and persisting the errors introduced in the scaled dataset.
 These files can also be seen as meta data.
-Introducing the errors into the actual distributed scaled up dataset is done by reading errors into Spark DataFrame from HDFS, and joining it on synthetic index.
+Introducing the errors into the actual distributed scaled up dataset is done by reading errors into Spark DataFrame from HDFS, and joining the errors with the replicated clean data on synthetic index.
 
 \textbf{Write to HFDS:} 
 Writing to HDFS was initially done using csv format, similar to the local data generation.
 However, utilizing Spark compression and parquet format reduced runtime significantly.
 
 \textbf{Validation:}  
-Results validation same to local, except Spark functions are used to aggregate statistics for comparison of the generated and original dirty datasets.
+Results validation is the same as local, except Spark functions are used to aggregate statistics for comparison of the generated and original dirty datasets.
 \input{content/chapter3/fig_distributed_gen}
 \input{content/chapter3/generator_algorithm_distributed}

@@ -1,4 +1,4 @@
-\subsection{Distributed experiments}
+\subsection{Distributed Experiments}
 \label{sec:runtime_distributed}
 
 Table~\ref{tab:distributed_runtimes} shows the runtimes of different scaling factors in the distributed version of the data generator.
@@ -8,6 +8,8 @@ The complexity of Spark job is dominated by joins and repartitioning.
 The number of joins is based on error types introduced and amount of faulty columns in total.
 The joins are performed on sequential unique indices.
 The \textit{tax} contains all 5 types of errors what leads to more complicated Spark jobs and more joins.
+Additionally, the queue of Spark tasks is imbalanced. 
+This leads to the performance that is worse by many orders of magnitude than expected.
 Also, the Spark Catalyst Optimizer tries to optimize the large sequences of instructions, this leads to long startup, compile and optimization times. 
 For instance, in scaling \textit{beers} to 2x the Spark context start up takes 25 seconds, data is scaled up (lazy evaluation) in 11 seconds, errors are saved to HDFS in 5 seconds, and new error distribution/statistics is computed in 11 seconds, and the result dataset is saved to HDFS in 25 seconds, plus various overheads of 7 seconds.
 According to the results, the proposed distributed data generator scales linearly.
@@ -19,7 +21,7 @@ But choice of error type and preserving the error distribution is not guaranteed
 The resulting datasize is 17.9 GB, the runtime is 17711 seconds (equivalent to approximately 5 hours).
 
 \begin{table}[!t]
-\caption{\label{tab:distributed_runtimes}Distributed runtimes [S] with different scales}
+\caption{\label{tab:distributed_runtimes}Distributed runtimes [s] with different scales}
 \centering
 \begin{tabular}{r|K|K|K|K|K|K}
 \toprule
