@@ -8,6 +8,11 @@ import matplotlib.pyplot as plt
 import matplotlib.transforms
 import numpy as np
 
+font = {'family': 'serif',
+            'weight': 'normal',
+            'size': 12}
+
+matplotlib.rc('font', **font)
 
 def get_args():
     parser = argparse.ArgumentParser()
@@ -108,6 +113,7 @@ def transpose_across_datasets(data: dict, ordering: list):
             ret[idx].append(v)
     return ret
 
+
 def cum_sum_to_percent(data:dict):
     # print(data)
     ret = {}
@@ -127,9 +133,9 @@ def plot_stacked_barplot(data, xlabels, legend, name, y_label= "# Errors"):
         dpi=80,
         facecolor="w",
         edgecolor="k",)
-
+    colors = ["brown", "tomato", "yellowgreen", "palevioletred" , "cornflowerblue"]
     for idx, err in enumerate(data):
-        ax.bar(range(len(err)), err, label=legend[idx])
+        ax.bar(range(len(err)), err, label=legend[idx], color=colors[idx])
     
     ax.margins(x=0)
 
@@ -147,8 +153,8 @@ def plot_stacked_barplot(data, xlabels, legend, name, y_label= "# Errors"):
     ax.legend(
         ncol=5,
          loc="upper center", 
-        bbox_to_anchor=(0.5, 1.2), 
-        fontsize=7.45,
+        bbox_to_anchor=(0.46, 1.25),
+        fontsize=9.3,
         #  frameon=False
     )
 
@@ -160,7 +166,7 @@ def plot_stacked_barplot(data, xlabels, legend, name, y_label= "# Errors"):
     #     label.set_transform(label.get_transform() + offset)
 
     plt.subplots_adjust(
-        left=0.15, right=0.98, top=0.85, bottom=0.18, wspace=0.35, hspace=0.35
+        left=0.15, right=0.98, top=0.83, bottom=0.18, wspace=0.35, hspace=0.35
     )
     # plt.grid(True,"major",axis='y', linewidth=0.3, alpha=0.8, ls='--')  # ls='--',
     plt.savefig(name)

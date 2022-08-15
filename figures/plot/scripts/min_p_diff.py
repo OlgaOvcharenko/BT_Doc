@@ -3,6 +3,7 @@ import os
 import distutils
 from fractions import Fraction
 
+import matplotlib
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -113,7 +114,7 @@ def plot_scatter_plots(scales_x, diff_y, path):
     ax.set_yticklabels(ticks_y)
 
     ax.set_xlabel("Scaling Factors")
-    ax.set_ylabel("% Max Difference")
+    ax.set_ylabel("% Min Difference")
     ax.yaxis.set_label_coords(-0.24, 0.43)
     plt.subplots_adjust(
         left=0.23, right=0.98, top=0.96, bottom=0.2, wspace=0.35, hspace=0.35
@@ -128,42 +129,92 @@ def plot_scatter_plots(scales_x, diff_y, path):
 
 
 def plot_all_scatter_plots(names, scales_x, diff_y, ticks, path):
+    font = {'family': 'serif',
+            'weight': 'normal',
+            'size': 12}
+
+    matplotlib.rc('font', **font)
+
     fix, ax = plt.subplots(1, 1,
-                           num=None, figsize=((42) / 6 * 1.0 / 2, 3 * 0.7),
-                           dpi=80,
+                           num=None, figsize=((42) / 4, 3 * 1.5 / 2),
+                           dpi=30,
                            facecolor="w",
                            edgecolor="k", )
 
-    # ax.margins(x=0, y=0)
+    ax.margins(x=0.01)
 
     # ticks_y = calc_yticks(max(diff_y)) if max(diff_y) != 0.0 else [0.0]
     # ax.set_yticks(diff_y[0])
     # ax.set_yticklabels(diff_y[0])
 
     ax.set_xlabel("Scaling Factors")
-    ax.set_ylabel("% Max Difference")
-    ax.yaxis.set_label_coords(-0.24, 0.43)
+    ax.set_ylabel("% Min Difference")
+    # ax.yaxis.set_label_coords(-0.24, 0.43)
     plt.subplots_adjust(
-        left=0.23, right=0.98, top=0.96, bottom=0.2, wspace=0.35, hspace=0.35
+        left=0.07, right=0.99, top=0.80, bottom=0.22, wspace=0.35, hspace=0.35
     )
     ax.set_xscale("log")
     ax.set_xticks(scales_x)
     ax.set_xticklabels(scales_x)
 
-    # ax.set_yscale("log")
+    ax.grid(axis="y")
+
+    ax.set_yscale("log")
     # ax.set_yticks(diff_y[0])
     # ax.set_yticklabels(diff_y[0])
 
     colors = ["brown", "tomato", "yellowgreen", "crimson", "cornflowerblue", "darkgreen"]
-    for d, y, c in zip(names, diff_y, colors):
-        print(len(scales_x))
-        print(len(y))
-        plt.plot(scales_x, y, "", label=d, color=c)
+    markers = ["*", "o", "v", "x", "X", "s"]
+    for d, y, c, m in zip(names, diff_y, colors, markers):
+        plt.plot(scales_x, y, "", label=d, color=c, marker=m)
 
-    plt.legend()
+    plt.plot(scales_x, [5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0], label='Allowed difference', color='black', linestyle="--")
+
+
+    plt.legend(ncol=7, loc='center', bbox_to_anchor=(0.48, 1.2))
     plt.savefig(path)
     # plt.show()
     plt.close()
+
+
+#
+# def plot_all_scatter_plots(names, scales_x, diff_y, ticks, path):
+#     fix, ax = plt.subplots(1, 1,
+#                            num=None, figsize=((42) / 4 * 1.0 / 2, 3 * 0.7),
+#                            dpi=80,
+#                            facecolor="w",
+#                            edgecolor="k", )
+#
+#     # ax.margins(x=0, y=0)
+#
+#     # ticks_y = calc_yticks(max(diff_y)) if max(diff_y) != 0.0 else [0.0]
+#     # ax.set_yticks(diff_y[0])
+#     # ax.set_yticklabels(diff_y[0])
+#
+#     ax.set_xlabel("Scaling Factors")
+#     ax.set_ylabel("% Min Difference")
+#     ax.yaxis.set_label_coords(-0.24, 0.43)
+#     plt.subplots_adjust(
+#         left=0.23, right=0.98, top=0.96, bottom=0.2, wspace=0.35, hspace=0.35
+#     )
+#     ax.set_xscale("log")
+#     ax.set_xticks(scales_x)
+#     ax.set_xticklabels(scales_x)
+#
+#     ax.set_yscale("log")
+#     # ax.set_yticks(diff_y[0])
+#     # ax.set_yticklabels(diff_y[0])
+#
+#     colors = ["brown", "tomato", "yellowgreen", "crimson", "cornflowerblue", "darkgreen"]
+#     for d, y, c in zip(names, diff_y, colors):
+#         plt.plot(scales_x, y, "", label=d, color=c)
+#
+#     plt.plot(scales_x, [5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0], label='Allowed diff', color='black', linestyle="--")
+#
+#     plt.legend(ncol=1)
+#     plt.savefig(path)
+#     # plt.show()
+#     plt.close()
 
 
 if __name__ == '__main__':
@@ -188,7 +239,7 @@ if __name__ == '__main__':
         val = abs(float(sum(x[1][1]) - sum(x[1][0])) / sum(x[1][1])) * 100 if sum(x[1][1]) != 0 else 0.0
         abs_diff.append(val)
         print(val)
-    metric = "max"
+    metric = "min"
     dataset_name = "tax"
     names = ["tax", "rayyan", "movies", "hospital", "flights", "beers"]
     values = [

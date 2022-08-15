@@ -4,9 +4,15 @@ import ast
 import os
 from pathlib import Path
 
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
+font = {'family': 'serif',
+            'weight': 'normal',
+            'size': 12}
+
+matplotlib.rc('font', **font)
 
 def get_args():
     parser = argparse.ArgumentParser()
@@ -69,7 +75,7 @@ def bar_plot(data, dir, name, color):
     ax.xaxis.set_label_coords(0.5, -0.04)
 
     plt.subplots_adjust(
-        left=0.15, right=0.98, top=0.96, bottom=0.1, wspace=0.35, hspace=0.35
+        left=0.2, right=0.98, top=0.90, bottom=0.05, wspace=0.35, hspace=0.35
     )
     plt.savefig(dir + "/" + name)
     plt.close()
@@ -82,8 +88,8 @@ def bar_plot_both(clean, dirty, dir, name):
                            facecolor="w",
                            edgecolor="k",)
 
-    ax.bar(np.arange(-0.25, len(clean)-0.25, 1), clean, 0.5, color='tab:blue')
-    ax.bar(np.arange(0.25, len(clean)+0.25, 1), dirty, 0.5, color='tab:red')
+    ax.bar(np.arange(-0.25, len(clean)-0.25, 1), clean, 0.5, color='cornflowerblue', label='Clean')
+    ax.bar(np.arange(0.25, len(clean)+0.25, 1), dirty, 0.5, color='orangered', label='Dirty')
 
     ax.margins(x=0)
     ax.set_yscale("log")
@@ -92,12 +98,21 @@ def bar_plot_both(clean, dirty, dir, name):
     ax.set_xlabel(len(data))
     ax.set_ylabel("# Distinct Values")
     ax.set_xlabel("Distinct Data Column")
-    ax.yaxis.set_label_coords(-0.13, 0.43)
-    ax.xaxis.set_label_coords(0.5, -0.04)
-
-    plt.subplots_adjust(
-        left=0.15, right=0.98, top=0.96, bottom=0.1, wspace=0.35, hspace=0.35
+    ax.yaxis.set_label_coords(-0.15, 0.43)
+    ax.xaxis.set_label_coords(0.5, -0.05)
+    ax.legend(
+        ['Clean', 'Dirty'],
+        ncol=2,
+        loc="center",
+        bbox_to_anchor=(0.5, 1.145),
+        # fontsize=7.45,
+        #  frameon=False
     )
+    plt.subplots_adjust(
+        left=0.18, right=0.98, top=0.81, bottom=0.13, wspace=0.35, hspace=0.35
+    )
+
+
     plt.savefig(dir + "/" + name)
     plt.close()
 
