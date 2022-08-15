@@ -3,14 +3,14 @@
 \label{sec:validation}
 % To check results after generation such statistics as min, max, mean, variance, skew are compared. Additionally, missing values,  distinct values and outliers are checked. 
 After the generation, the new dataset is validated to analyze and check if statistics are preserved. 
-The data and error characteristics of the freshly generated dataset are compared against characteristics of the original dirty dataset.
+The data and error characteristics of the generated dataset are compared against characteristics of the original dirty dataset.
 The following soft constraints are used to validate the generated dataset:
 \begin{itemize}
     \item The mean difference of the generated and the original dirty datasets should be within 10\%.
-    \item The generated dataset's quantiles should be within 
+    \item The generated dataset's upper and lower quantiles should be within 
     \item[~]$[Q_{dirty}(0.25) - 1.5\cdot IQR, Q_{dirty}(0.75) + 1.5\cdot IQR]$.
     \item Min and max are compared, and should be equivalent.
-    \item The number of distinct values in generated dataset and estimated number~\ref{eq:distincts} should be within 5\%.
+    \item The number of distinct values in generated dataset and estimated number by Equation~\ref{eq:distincts} should be within 5\%.
     \item The number of generated missing values, outliers, typos, replacements, and swaps differentiates by maximum  of 10\% from the original dirty numbers multiplied with the scaling factor.
     \item The number of unique values for each error is compared to the estimated, similar to the number of distinct items above.
 \end{itemize}

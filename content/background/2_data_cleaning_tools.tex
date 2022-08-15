@@ -4,27 +4,28 @@
 
 A huge effort has been made in the research community to automate data cleaning and validation. 
 Many researchers have injected errors into the data with ground truth to experiment and evaluate their cleaning pipelines.
-In this section existing frameworks, their differences, benefits, and disadvantages are discussed.
+In this section, existing frameworks, their differences, advantages, and disadvantages are discussed.
 % FDs, denial constraints: Any measurements where to introduce errors like HoloClean / Picket? Instead of just randomly.
-Error detection is typically limited to a specific side effects of erogenous data (e.g., duplicates, integrity constraints violation), and data repairing methods are often not introducing correct repairs~\cite{RekatsinasCIR2017}.
+Error detection is typically limited to a specific problems (e.g., duplicates, integrity constraints violation), and data repairing methods are often not introducing correct repairs~\cite{RekatsinasCIR2017}.
 
 \textbf{HoloClean/HoloDetect:} 
 HoloClean~\cite{RekatsinasCIR2017} is a framework for holistic data repairing driven by probabilistic inference. The framework introduces an approach for combining heterogeneous data cleaning methods.
-It generates a probabilistic graphical model that uses input denial constraints and matching dependencies, capturing the uncertainty over observations in the input dataset Then, the probabilistic inference is used to reason about inconsistencies and repair them with most probable values. %likely values. 
+It generates a probabilistic graphical model that uses input denial constraints and matching dependencies, capturing the uncertainty over observations in the input dataset. 
+Then, the probabilistic inference is used to reason about inconsistencies and repair them with most probable values. %likely values.
 HoloDetect~\cite{holodetect} is the follow up work. HoloDetect is a framework for the error detection.
-Correct and erogenous observations are generated with data augmentation and few-shot learning, and then used as input for a classifier to detect whether a value is an error.
+Correct and erroneous observations are generated with data augmentation and few-shot learning, and then used as input for a classifier to detect whether a value is an error.
 
 \textbf{Raha/Baran:} 
 Another error detection system is Raha~\cite{raha}, and Baran~\cite{baran}.
-Here errors are detected and corrected with a ML ensemble of existing algorithms, rules, and constraints.
+Here errors are detected and corrected with an ML ensemble of existing algorithms, rules, and constraints.
 Users need to label clusters of noisy data where each cluster represents an implicit type of data errors.
 These labels are then used to classify dirty and clean values. 
 The main limitation of Raha/Baran is that the user label propagation is required for the classifier.
-Moreover, the system requires to run many algorithms/configurations that can be very extensive, and even with pruning there is no guarantee for the best performance.
+Moreover, the system requires to run many algorithms/configurations that can be very extensive, and even with pruning, there is no guarantee for the best performance.
 
 \textbf{ActiveClean and BoostClean:} 
 ActiveClean~\cite{activeclean}, a model training framework that allows cleaning for iterative data while preserving monotone convergence guarantee.
-Samples of data are suggested to clean based on the likelihood if it is a dirty value.
+Samples of data are suggested to clean based on the likelihood of being a dirty value.
 ActiveClean concentrates on the repair of the specific error types such as domain values violations.
 But Sympson's Paradox~\cite{activeclean} defines that any subset of a dataset is not guaranteed to represent the whole dataset.
 This means that sample distribution is not always enough to judge about the distribution of the whole data. 
@@ -35,7 +36,7 @@ BoostClean~\cite{boostclean} is another framework that automatically selects a f
 \textbf{Jenga:} 
 Jenga~\cite{jenga} is an open source experimentation library that allows to test ML models for robustness against common data errors observed in production scenarios (e.g., missing values, swapped values, noise).
 It takes raw input data and randomly introduces certain data errors to then evaluate the given as an input ML model.
-Jenga gives an opportunity to study an impact of introduced errors on the dataset and model prediction respectively.
+Jenga gives an opportunity to study the impact of introduced errors on the dataset and model prediction, respectively.
 Jenga uses ML approach (predict - corrupt - evaluate) to validate data and to check the influence of errors.
 
 % - [ ] Gouda
@@ -43,13 +44,13 @@ Jenga uses ML approach (predict - corrupt - evaluate) to validate data and to ch
 % 	Constraints categories: redundancy about an entity, inconsistence about an entity
 % 	Mention as explicit limitation that experimenting with duplicates is not part of our work. Could be, but unclear for ML.
 \textbf{GouDa and BART:} 
-This work address the often a lack of the publicly available datasets with ground truth for research and evaluation of ML pipelines, data cleaning approaches. 
+This work addresses the commonly lacking public availability of datasets with ground truth for research and evaluation of ML pipelines, data cleaning approaches. 
 GouDa~\cite{RestatGCS2022} is a tool for the automated generation of datasets with possibility to create specific error types at arbitrary error range.
 GouDa consists of two steps: data and error generation.
-Data generator (part of EvoBench project~\cite{evobench}) takes schema and feature value ranges as an input and outputs purely synthetic dataset based on them. 
+Data generator (part of EvoBench project~\cite{evobench}) takes a schema and feature value ranges as an input and outputs purely synthetic dataset based on them. 
 Error generator introduces variety of error types at configurable error rate at a single value, attribute, tuple and several tuples levels.
-Since the data is fully synthetic and generator's input are schema and constraints, ground truth is provided. 
-Conversely to GouDa, BART~\cite{bart}, an error-generation tool for data cleaning applications, needs an existing data and inserts errors into the actual dataset that is assumed to be clean. It requires relational schema, user specifies
+Since the data is fully synthetic and generator's inputs are schema and constraints, ground truth is provided. 
+Conversely to GouDa, BART~\cite{bart}, an error-generation tool for data cleaning applications, needs an existing dataset and inserts errors into the actual dataset that is assumed to be clean. It requires relational schema, user specify
 a set of data quality rules as denial constraints~\cite{denialconst} (functional dependencies~\cite{BohannonFGJK2007,  QahtanTOCS2020}, conditional functional dependencies~\cite{FanGJK2008}, fixing rules~\cite{fixingrules}). 
 User can specify error rates but also how detectable and repairable introduced errors are given constraints.
 
@@ -60,16 +61,16 @@ User can specify error rates but also how detectable and repairable introduced e
 % - [ ] CleanML
 
 \textbf{Comparison of existing tools and the new data generator:} 
-Most of the mentioned above systems can be optimized by parallelizing the workflow~\cite{raha, baran, RekatsinasCIR2017, holodetect, RestatGCS2022, jenga}, this can be seen as a limitation.
-Another constraint in existing frameworks are hand-crafted rules/constraints or user manual labeling.
-Importantly, it is difficult to measure the accuracy of the above mentioned tools without ground truth and mostly existing frameworks use manually cleaned datasets, what is not feasible on scale.
+Most of the mentioned above systems are not supporting distributed execution~\cite{raha, baran, RekatsinasCIR2017, holodetect, RestatGCS2022, jenga}, limiting the applicability to a single machine.
+Another constraint in existing frameworks are hand-crafted rules/constraints or manual labeling (by users).
+Importantly, it is difficult to measure the accuracy of the above mentioned tools without ground truth and mostly existing frameworks use manually cleaned datasets, which is not feasible at scale.
 % Unknown ground truth and synthetically generated errors are the problem
-This contribution solves the dilemma of finding ground truth.
+This thesis solves the dilemma of finding ground truth.
 Errors are generated not syntactically, but are based on the original data and error distribution.
-Moreover, data can be generated either local or in distributed setting.
+Moreover, data can be generated either locally or in a distributed setting.
 In comparison to GouDa, where datasets are purely synthetic, our data generator uses real-world datasets,
 thus error and data distributions are preserved. 
-Additionally, in contrast to GouDa and Jenga, this system supports distributed data and error generation.
+Additionally, in contrast to GouDa and Jenga, our system supports distributed data and error generation.
 
 % #1 Unknown Ground Truth / Synthetically Generated Errors 
 % #2 Fixed, Partially-unavailable Datasets
