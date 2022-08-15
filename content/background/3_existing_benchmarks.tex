@@ -3,12 +3,12 @@
 \label{sec:existing_benchmarks}
 % Existing benchmarks such as CP_Clean and +1 that was sent
 
-Currently, there is no standard and generalized way of comparing data validation, error detection and repair for ML.
+Currently, there is no standard and generalized way of benchmarking data validation, error detection and repair for ML, but benchmarks for selected related aspects exist.
 
 % Sorting Hat
 \textbf{Sorting Hat project}: 
 This project aims to benchmark the automation of the data preparation in AutoML platforms: create benchmarks and labeled datasets and use ML to automate data preparation.
-In context of the Sorting Hat project~\cite{sortinghat} the \textbf{ML Data Prep Zoo}~\cite{prepzoo} was introduced.
+In the context of the Sorting Hat project~\cite{sortinghat}, the ML Data Prep Zoo~\cite{prepzoo} was introduced.
 ML Data Prep Zoo is a public repository with labeled datasets and pre-trained ML models for data preparation tasks (e.g., schema inference, detection of anomalous categories, category deduplication, feature type inference).
 The central goal is to create large labeled datasets without time-consuming manual labeling.
 
@@ -19,17 +19,17 @@ OpenML~\cite{openml_suites} is a public platform for sharing datasets, algorithm
 % DataCivilizer
 \textbf{DataCivilizer:}
 DataCivilizer~\cite{datacivil} is an end-to-end big data management system. 
-It builds a linkage graph to for the data and utilizes it to identify data relevant to user tasks. 
+It builds a linkage graph for the data and utilizes it to identify data relevant to user tasks. 
 It integrates data cleaning process into the query processing and trades-off the query result quality with the cleaning cost. 
 Automatic error detection tools are applied to detect outliers, duplicates and integrity constraints violations.
 
 % CleanML
 \textbf{CleanML:}
 CleanML~\cite{cleanml} is a benchmark for joint data cleaning and machine learning.
-This study experimented with 14 public real-world datasets without ground truth to investigate the impact of data cleaning on ML classification task. 
+This study experimented with 14 public real-world datasets without ground truth to investigate the impact of data cleaning on ML classification tasks. 
 ML model performance is evaluated on clean/dirty data.
-The study shows that data cleaning is more applicable solution comparing to specific robust models, and can be valuable in both the model development and deployment steps~\cite{cleanml}.
-Moreover, some errors have less impact on ML model than other (e.g, missing values imputation positively influences ML model performance, while cleaning outliers has more likely insignificant impact). 
+The study shows that data cleaning is more applicable solution comparing than specific robust models, and can be valuable in both the model development and deployment steps~\cite{cleanml}.
+Moreover, some errors have less impact on ML models than others (e.g, missing values imputation positively influences ML model performance, while cleaning outliers has more likely insignificant impact). 
 
 \textbf{AutoML benchmarks:} 
 % AutoWeka and AutoSklearn
@@ -39,12 +39,12 @@ AutoWeka is a platform that focuses mainly on model selection, not data cleaning
 AutoSKLearn also mainly concentrates on algorithm selection and hyperparameter tuning.
 
 \textbf{Comparison to this work:} 
-Current error detection shows~\cite{errors, cleanml} that the percentage of errors found by techniques in real-world datasets is still well less than 100\%. 
-Many errors can be spotted only by humans, but not by currently existing algorithms, instruments, and techniques.
+Current error detection~\cite{errors, cleanml} shows that the percentage of errors found by techniques in real-world datasets is still well below 100\%. 
+Many errors can be spotted only by humans, but not by currently existing algorithms, techniques, and tools.
 Moreover, there is no universal data cleaning tool for all datasets, and thus "composite" strategies are commonly applied~\cite{errors}.
-This paper takes a real-world dataset as an input, extracts real error patterns and dependencies (e.g., functional dependencies, value ranges) from the data, scales the dataset with configurable error rates. 
-Moreover, user can define own rules, constraints or even methods how to impute the error to a particular feature.
-Thus, it is easier to measure the erroneousness of the scaled dataset. 
+This paper takes a real-world dataset as an input, extracts real error patterns and dependencies (e.g., functional dependencies, value ranges) from the data, and finally, scales the dataset with configurable error rates. 
+Moreover, a user can define own rules, constraints or even methods how to impute the error to a particular feature.
+% Thus, it is easier to measure the erroneousness of the scaled dataset. 
 
 % Input Data/ML Applications
 % Structured and semi-structured data of different types
