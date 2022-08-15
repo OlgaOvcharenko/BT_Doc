@@ -6,11 +6,12 @@ After the generation, the new dataset is validated to analyze and check if stati
 The data and error characteristics of the generated dataset are compared against characteristics of the original dirty dataset.
 The following soft constraints are used to validate the generated dataset:
 \begin{itemize}
-    \item The mean difference of the generated and the original dirty datasets should be within 10\%.
-    \item The generated dataset's upper and lower quantiles should be within 
+    \item The mean difference of the generated and the original dirty datasets should be within 5\%.
+    \item The variance difference of the generated and the original dirty datasets should be within 5\%.
+    \item The upper and lower quantiles of the generated dataset should be within 
     \item[~]$[Q_{dirty}(0.25) - 1.5\cdot IQR, Q_{dirty}(0.75) + 1.5\cdot IQR]$.
     \item Min and max are compared, and should be equivalent.
-    \item The number of distinct values in generated dataset and estimated number by Equation~\ref{eq:distincts} should be within 5\%.
+    \item The number of distinct values in generated dataset and estimated number of distinct values by Equation~\ref{eq:distincts} should be within 5\%.
     \item The number of generated missing values, outliers, typos, replacements, and swaps differentiates by maximum  of 10\% from the original dirty numbers multiplied with the scaling factor.
     \item The number of unique values for each error is compared to the estimated, similar to the number of distinct items above.
 \end{itemize}
@@ -32,4 +33,4 @@ Interestingly, the performance of aggregating statistics impacts execution time.
 Thus, Spark approximate algorithms were tried out, such as \textsc{approx\_count\_distinct}.
 But for small scaling factors these were inaccurate even with 10\% precision, estimating the number of distinct items less in original dirty dataset.
 Consequently, estimations and in-expectation statistics are not sufficient for this framework.
-Error distribution is computed while error generation.
+Error distribution of the generated dataset is computed while error generation same as in the local execution.

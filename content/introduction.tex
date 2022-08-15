@@ -16,7 +16,7 @@ The DB community's focus is on error detection and repairing~\cite{Hellerstein08
 Data cleaning is the process of replacing or removing faulty values from a dataset.
 It consists of two steps: error detection and repair.
 Error detection aims to identify errors, while error repair imputes/fixes flawed values using knowledge gathered from the clean input data. 
-There are many existing techniques~\cite{duplicatesstudy, tdeexcel} and frameworks to clean the data such as HoloDetect/HoloClean~\cite{holodetect, RekatsinasCIR2017}, Raha/Baran~\cite{raha, baran}, BoostClean~\cite{boostclean}, AlphaClean~\cite{alphaclean}, ActiveClean~\cite{activeclean}. 
+There are many existing techniques~\cite{duplicatesstudy, tdeexcel} and frameworks to clean the data such as HoloDetect/HoloClean~\cite{HeidariMIR2019, RekatsinasCIR2017}, Raha/Baran~\cite{raha, baran}, BoostClean~\cite{boostclean}, AlphaClean~\cite{alphaclean}, ActiveClean~\cite{activeclean}. 
 Existing techniques and frameworks are limited by additional user input such as hand-crafted constraints~\cite{bart}, or manual labeling (by users)~\cite{raha, baran}.
 For evaluating data cleaning approaches the ground truth (GT) is required, unless other signals such as the performance on an ML application exist.
 GT is not always available and is time-consuming to collect or create.
@@ -30,7 +30,7 @@ Limited or even missing access to the raw data makes construction or acquisition
 \textbf{Data cleaning in ML pipelines}: 
 Data cleaning is essential for the performance of ML models or databases.
 It is part of the ML pipeline that aims to automate machine learning workflow. 
-ML pipeline consists of several steps: data collection~\cite{LiDLMS2015}, data cleaning~\cite{raha, baran, RekatsinasCIR2017, holodetect, activeclean, alphaclean, cleanml}, feature extraction~\cite{ShahLKYK2021}, model training~\cite{RekatsinasCIR2017}, model debugging~\cite{SagadeevaB2021}, model evaluation~\cite{generalizing_confusion_matrix}, model visualization~\cite{NakandalaKP2019, CrottyGZBK2015, SimonyanVZ2013}, and model serving~\cite{OlstonFGHLLRR2017, Lee2018, WeiGZWCNOSR2018}.
+ML pipeline consists of several steps: data collection~\cite{LiDLMS2015}, data cleaning~\cite{raha, baran, RekatsinasCIR2017, HeidariMIR2019, activeclean, alphaclean, cleanml}, feature extraction~\cite{ShahLKYK2021}, model training~\cite{RekatsinasCIR2017}, model debugging~\cite{SagadeevaB2021}, model evaluation~\cite{generalizing_confusion_matrix}, model visualization~\cite{NakandalaKP2019, CrottyGZBK2015, SimonyanVZ2013}, and model serving~\cite{OlstonFGHLLRR2017, Lee2018, WeiGZWCNOSR2018}.
 Data preparation is a key step and obeys the garbage in, garbage out principle (GIGO).
 GIGO is the concept that flawed input data produces nonsense output.
 

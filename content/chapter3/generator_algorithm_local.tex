@@ -3,51 +3,28 @@
     \begin{algorithmic}[1] 
         \REQUIRE{Error distribution $\mat{err\_dist}$, scaled dataset $\mat{data}$, scaling factor $scaling\_factor$, schema of the dirty dataset $dirty\_schema$}
 	  \ENSURE{New error distribution $\mat{new\_err\_dist}$, scaled dataset $\mat{data}$}
+	  \COMMENTLINE{a) create new error distribution}
+	  \STATE $\mat{new\_err\_dist} \leftarrow \text{\textsc{ErrorDistribution}(dirty\_schema, \mat{data}.row, \mat{data}.col)}$
 	  
-	  \COMMENTLINE{a) create a pool to introduce mv, typos, replacements, and indices for outliers}
+	  \COMMENTLINE{b) create a pool to introduce mv, typos, replacements, and indices for outliers}
 	  
 	  \STATE $\mat{pool} \leftarrow \text{Pool}(\#CPU)$
 	  \FOR{$col$ \textbf{in} $\text{data.columns}$} {
 	    \STATE $kwargs \leftarrow [\mat{data}[col], \mat{err\_dist}, \mat{new\_err\_dist}, scaling\_factor, col]$ 
-        \STATE $\text{tasks.append(\mat{pool}.apply\_async(\textsc{get\_errors\_in\_col},} kwargs\text{)}$ 
+        \STATE $\text{tasks.append(\mat{pool}.apply\_async(\textsc{get\_errors\_in\_col},} \ kwargs\text{))}$ 
       }\ENDFOR 
       
-      \COMMENTLINE{b) execute tasks and modify new error distribution}
-	  \STATE $\mat{new\_err\_dist} \leftarrow \text{\textsc{ErrorDistribution}(dirty\_schema, \mat{data}.row, \mat{data}.col)}$
+      \COMMENTLINE{c) execute tasks and modify new error distribution}
 	  \FOR{$task$ \textbf{in} $\text{tasks}$} {
         \STATE $dist\_changes, col\_name, \mat{updated\_col} \leftarrow task\text{.get()}$ 
         \STATE $\mat{new\_err\_dist}.\textsc{update}(dist\_changes, col\_name)$ 
         \STATE $\mat{data}[col] \leftarrow \mat{updated\_col}$ 
       }\ENDFOR 
       
-      \COMMENTLINE{c) introduce numerical swaps}
-      \STATE $\mat{data}, \mat{new\_err\_dist} \leftarrow \textsc{add\_swaps}(\mat{data}, \mat{err\_dist}, \mat{new\_err\_dist})$ 
+      \COMMENTLINE{d) introduce numerical swaps}
+      \STATE $\mat{data}, \mat{new\_err\_dist} \leftarrow \textsc{add\_swaps\_num}(\mat{data}, \mat{err\_dist}, \mat{new\_err\_dist})$ 
       
-      \COMMENTLINE{d) introduce outliers based on indices created earlier}
-      \STATE $\mat{data}, \mat{new\_err\_dist} \leftarrow \textsc{add\_swaps}(\mat{data}, \mat{err\_dist}, \mat{new\_err\_dist})$ 
-      
-    %   \FOR{$col$ \textbf{in} $\text{data.columns}$} {
-    %     \STATE $dist\_changes, col\_name, \mat{updated\_col} \leftarrow \textsc{add\_outliers}($
-    %   \STATE $\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mat{data}, \mat{err\_dist}, \text{new\_err\_dist.outlier\_indices})$ 
-    %     \STATE $\mat{new\_err\_dist}.\textsc{update}(dist\_changes, col\_name)$ 
-    %     \STATE $\mat{data}[col] \leftarrow \mat{updated\_col}$ 
-    %   }\ENDFOR 
-    
-    
-	  
-	  \STATE $\mat{pool} \leftarrow \text{Pool}(\#CPU)$
-	  \FOR{$col$ \textbf{in} $\text{data.columns}$} {
-        \STATE $\text{tasks.append(\mat{pool}.apply\_async(\textsc{get\_errors\_in\_col})}$ 
-      }\ENDFOR 
-      
-      \COMMENTLINE{b) execute tasks and modify new error distribution}
-	  \STATE $\mat{new\_err\_dist} \leftarrow \text{\textsc{ErrorDistribution}(dirty\_schema, \mat{data}.row, \mat{data}.col)}$
-	  
-      
-      \COMMENTLINE{c) introduce numerical swaps}
-      \STATE $\mat{data}, \mat{new\_err\_dist} \leftarrow \textsc{add\_swaps}(\mat{data}, \mat{err\_dist}, \mat{new\_err\_dist})$ 
-      
-      \COMMENTLINE{d) introduce outliers based on indices created earlier}
+      \COMMENTLINE{e) introduce outliers based on indices created earlier}
     %   \STATE $\mat{data}, \mat{new\_err\_dist} \leftarrow \textsc{add\_swaps}(\mat{data}, \mat{err\_dist}, \mat{new\_err\_dist})$ 
       
     %   \FOR{$col$ \textbf{in} $\text{data.columns}$} {
@@ -58,7 +35,7 @@
     
 	  \FOR{$col$ \textbf{in} $\text{data.columns}$} {
 	    \STATE $kwargs \leftarrow [\mat{data}[col], \mat{err\_dist}, \mat{new\_err\_dist}.outlier\_indices, col]$ 
-        \STATE $\text{tasks.append(\mat{pool}.apply\_async(\textsc{add\_outliers},} kwargs\text{)}$ 
+        \STATE $\text{tasks.append(\mat{pool}.apply\_async(\textsc{add\_outliers},}\ kwargs\text{))}$ 
       }\ENDFOR 
       
 	  \FOR{$task$ \textbf{in} $\text{tasks}$} {
@@ -67,7 +44,7 @@
         \STATE $\mat{data}[col] \leftarrow \mat{updated\_col}$ 
       }\ENDFOR 
       
-      \COMMENTLINE{e) introduce mixed swaps}
+      \COMMENTLINE{f) introduce mixed swaps}
       \STATE $\mat{data}, \mat{new\_err\_dist} \leftarrow \textsc{add\_swaps}(\mat{data}, \mat{err\_dist}, \mat{new\_err\_dist})$ 
       
       \RETURN $\mat{new\_err\_dist}, \mat{data}$
@@ -100,7 +77,7 @@
       \STATE $ind \leftarrow \textsc{random\_sample\_except}($
       \STATE $\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mat{data\_c}.nrow, size, \mat{new\_err\_dist}.replacements\_indices)$ 
       
-	  \COMMENTLINE{e) modify column with errors}
+	  \COMMENTLINE{f) modify column with errors}
 	  \STATE $data\_c \leftarrow \textsc{add\_errors}(\mat{data\_c}, ind, \mat{new\_err\_dist}.replacements\_indices)$ 
       
       \RETURN $\mat{data\_c}, \mat{new\_err\_dist}$

@@ -26,8 +26,10 @@ First, the absence of data reduces statistical power of the dirty dataset, movin
 Second, lost data can cause bias in the estimation of parameters. 
 The previous example of people not reporting if they are obese could be a cause of bias. 
 Third, the representativeness of the samples can influence the set of distinct values, frequencies, and ratios between them.
-The benchmark supports MCAR. 
+Our data generator supports MCAR.
+Infinity, Not a Number, NA, maximum and minimum floating point numbers are classified as missing values that can be added.
 New missing values are generated using unique missing values of the original dirty dataset. 
+
 % To maintain the frequencies of values, existing missing values are scaled up, and number of new missing values is estimated by Schlosser \cite{HassNSS1995} and Hasso Stokes \cite{HassS1998} estimation algorithms.
 
 \textbf{Typos:} 
@@ -53,7 +55,7 @@ In essence the balanced outlier values utilize the concept of reflection symmetr
 We generate initial outliers using interquartile range, scaling by orders of magnitudes, distribution, or minimum and maximum of the clean dataset.
 \begin{equation}
 \label{eq:outlier_correction}
-\textsc{correction} = \frac{(\textsc{mean\_dirty} - \textsc{mean\_generated}) \cdot \textsc{nrow\_generated})}{\textsc{num\_outliers}}
+\textsc{correction} = \frac{(\textsc{mean\_dirty} - \textsc{mean\_generated}) \cdot \textsc{nrow\_generated}}{\textsc{num\_outliers}}
 \end{equation}
 
 \textbf{Replacements:} 

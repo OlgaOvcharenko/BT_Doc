@@ -3,25 +3,28 @@
 The framework proposed in this work initiates the large-scale generation of dirty data, in which original real-world observations are used to extract error patterns and create new observations.
 The new data generation framework scales existing datasets while preserving error distribution and statistics.
 The experiments show linear performance in distributed execution, and super linear in local execution.
-The biggest data size generated is 18 GB that corresponds to a scaling factor of 65536x.
+The biggest data size generated is 18 GB that corresponds to a scaling factor of \numprint{65536}x.
 Six different datasets with ground truth were used for experiments: five real-world and one synthetic.
 Different scaling factors were tested on all datasets.
 Thus, it is demonstrated that it is possible to generate large datasets while preserving statistics of a small sample of dirty data.
 
 % Lessons Learned
-It is challenging to generate datasets with statistical properties of the original dirty dataset.
-In this context, execution and optimization of distributed workloads is a non-trivial and time-consuming task.
-Researching the context of data cleaning and studying existing state-of-the-art frameworks also brought many insights of what can be done and improved.
-But the faced challenges were handled, and turned into the improvements of the framework and lessons learned.
+% What does that mean exactly and what are the lessons learned?
+The lessons learned include: Researching the context of data cleaning, studying existing state-of-the-art frameworks and algorithms to define the components of the data generator, and execution and optimization of distributed workloads.
+This work lead to learning about Apache Spark intrinsic behaviour and Pandas DataFrame specialization for handling clean and  dirty data.
 
 % Limitations and Future Work - 3 paragraphs
+% This paragraph needs rework - please focus on what conclusions we can draw from the implementation and experimental results on feasibility of distributed data generation, applicability for benchmarking cleaning for ML, and remaining challenges.
+It is challenging to generate datasets while maintaining statistical properties of the original dirty dataset.
+From the implementation and the experimental results we can draw a conclusion that it is feasible to generate large-scale datasets with the distributed data generator, but it can be time-consuming because of skewed runtime of tasks in central Spark jobs.
+Our data generator can be applied for benchmarking cleaning for ML tools.
 Interesting directions for future work include 
-(1) understanding of existing skew of Spark tasks and optimization of the distributed execution
+(1) understanding of existing skew of Spark tasks and optimization of the distributed execution,
 (2) optimization of the local execution, 
 (3) more advanced and fine-grained error detection and classification algorithms,
 (4) support of more error types, 
 (5) integration into data cleaning benchmarks, and
-(6) different techniques for scaling up such as random.
+(6) different techniques for scaling up such as random choice of tuples from the clean dataset.
  
 
 % % Say what your solution achieves (200 words)

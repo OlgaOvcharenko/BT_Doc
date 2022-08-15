@@ -17,8 +17,6 @@ The framework contains full pipelines consisting of the following generalized st
 \label{sec:local_generator}
 \input{content/chapter3/fig_local_gen}
 
-\input{content/chapter3/generator_algorithm_local}
-
 First, for scaling to in-memory sizes there is a local data generator execution that consists of the following steps that are also shown in Figure~\ref{fig:data_gen_local}:
 
 \textbf{Read:} 
@@ -38,7 +36,7 @@ First, distinct values of actual data are aggregated, and a binary mask (of dirt
 The mask allows the framework to know the ratio and exact number of errors introduced in each feature, and to track detected and undetected errors. 
 Errors are analyzed in a particular sequence, since if a cell was classified as error of one type, it can not contain any other error types, this is based on the simplifying assumption that there are no compound errors.
 First, missing values are detected using the Pandas \textsc{isnull()} method. 
-Second, outliers are detected by interquartile range (IQR), shown in Formula~\ref{eq:is_outlier_iqr}, and by distribution, shown in Formula~\ref{eq:is_outlier_std}. 
+Second, outliers are detected by interquartile range (IQR) and by distribution. 
 Formula~\ref{eq:is_outlier_iqr} uses IQR, Formula~\ref{eq:outlier_iqr}, to define lower and upper limits, while Formula~\ref{eq:is_outlier_std} relies on standard deviation, Formula~\ref{eq:std}. 
 Lower and upper limits are stored, and then reused during error generation. 
 Third, dirty data is inspected for replacements. 
@@ -84,12 +82,14 @@ Scaling to 2x is equivalent to rolling 6 unique sides at least once with 12 tria
 To avoid this inconsistency, we chose to scale up by replication. 
 If the scaling factor is a floating point number, then the integer part is replicated, and the remaining floating part is sampled randomly from the clean data.
 
+\input{content/chapter3/generator_algorithm_local}
+
 \textbf{Error generation and introduction:} 
 Error generation and introduction is done column wise, and is presented in Algorithm~\ref{alg:local_generator}. 
 Since the main workload of the framework is in this phase, each column is processed in parallel, with the exception of multi column errors such as swaps.
 Typos, missing values and replacements are added to the scaled dataset in the first iteration as shown in Algorithm~\ref{alg:local_get_errors_in_col}.
 For missing values and typos the distinct item sets and frequencies are gathered from the error analysis and statistics phases. 
-To maintain the frequencies of missing values and typos, existing values are scaled up, and number of new missing values and typos is estimated by Schlosser \cite{HassNSS1995} and Hasso Stokes \cite{HassS1998} estimation algorithms.
+To maintain the frequencies of missing values and typos, existing missing values and typos are scaled up, and number of new distinct missing values and typos is estimated by Schlosser \cite{HassNSS1995} and Hasso Stokes \cite{HassS1998} estimation algorithms.
 Existing missing value and typo frequencies are scaled by the scaling factor. 
 Additionally, a specific number of new unique values is generated, this number is estimated as described in the previous paragraph.
 The number of occurrences of a new unseen unique value is computed similar to n-gram smoothing techniques. 
@@ -151,6 +151,8 @@ First, we define a column with sequential indices.
 Then, this column is used by a \textsc{UDF} to map each existing row index to a list of new sequential row indices.
 Finally, Spark \textsc{explode} utilizes these lists to "explode" (replicate) rows with a new index.
 
+\input{content/chapter3/generator_algorithm_distributed}
+
 \textbf{Error generation:} 
 Erroneous values are generated locally using error characteristics collected from the original dirty dataset.
 The values are combined with row indices to create new error locations, Algorithm~\ref{alg:dist_generator}.
@@ -168,4 +170,3 @@ However, utilizing Spark compression and parquet format reduced runtime signific
 \textbf{Validation:}  
 Results validation is the same as local, except Spark functions are used to aggregate statistics for comparison of the generated and original dirty datasets.
 \input{content/chapter3/fig_distributed_gen}
-\input{content/chapter3/generator_algorithm_distributed}

@@ -18,19 +18,19 @@
 	  \STATE $\mat{pool} \leftarrow \text{Pool}(\#CPU)$
 	  \FOR{$col$ \textbf{in} $\text{data.columns}$} {
 	    \STATE $kwargs \leftarrow [\mat{err\_dist}, \mat{new\_err\_dist}, scaling\_factor, col]$ 
-        \STATE $\text{tasks.append(\mat{pool}.apply\_async(\textsc{get\_errors\_in\_col\_dist},} kwargs\text{)}$ 
+        \STATE $\text{tasks.append(\mat{pool}.apply\_async(\textsc{get\_errors\_in\_col\_dist},} \ kwargs\text{))}$ 
       }\ENDFOR 
       
-      \COMMENTLINE{b) execute tasks and modify new error distribution}
+      \COMMENTLINE{c) execute tasks and modify new error distribution}
 	  \FOR{$task$ \textbf{in} $\text{tasks}$} {
         \STATE $dist\_changes, col\_name \leftarrow task\text{.get()}$ 
         \STATE $\mat{new\_err\_dist}.\textsc{update}(dist\_changes, col\_name)$ 
       }\ENDFOR 
       
-      \COMMENTLINE{c) read files with errors and join into data}
+      \COMMENTLINE{d) read files with errors and join into data}
       \STATE $\textsc{read\_errors\_and\_join}(\mat{data}, \mat{new\_err\_dist})$ 
       
-      \COMMENTLINE{d) introduce swaps}
+      \COMMENTLINE{e) introduce swaps}
       \STATE $\mat{data}, \mat{new\_err\_dist} \leftarrow \textsc{create\_swaps\_write\_and\_join}(\mat{data}, \mat{err\_dist}, \mat{new\_err\_dist})$ 
       
       \RETURN $\mat{new\_err\_dist}, \mat{data}$

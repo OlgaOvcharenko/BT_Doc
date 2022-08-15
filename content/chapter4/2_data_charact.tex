@@ -19,7 +19,7 @@ and the source can be be tracked to \textcite{Hould2017WEB, Hould2017KAGGLE}.
 The dataset contains information about different beer sorts, respective bottles and their producers.
 
 \textbf{Flights} is a real-world dataset that originally was collected by \textcite{LiDLMS2015}. 
-It is used in many projects \cite{holodetect, raha, LiDLMS2015}.
+It is used in many projects \cite{HeidariMIR2019, raha, LiDLMS2015}.
 This dataset contains information on arrival and departure of flights.
 The source of this dataset is \textcite{LiDLMS2015}.
 
@@ -28,7 +28,7 @@ It is frequently used \cite{RestatGCS2022, ChuIP2013, DallachiesaEEEIOT2013, Hei
 The dataset contains information about providers, their addresses, contacts and measurements they do.
 In the experiments, a fraction of the whole dataset was used.
 The fraction is published in GitHub~\footnote{\url{https://github.com/BigDaMa/raha/tree/master/datasets}}.
-Both \textit{flights} and \textit{hospital}, were obtained along with ground truth from \textcite{holodetect}.
+Both \textit{flights} and \textit{hospital}, were obtained along with ground truth from \textcite{HeidariMIR2019}.
 
 \textbf{Movies} is a dataset that is available in the Magellan repository~\cite{DasDGGKGP2016, KondaDSDABLPZNPKDR2016}.
 It was collected by web scraping Rotten Tomatoes~\footnote{\url{https://www.rottentomatoes.com/}} and IMBD~\footnote{\url{https://www.imdb.com/}}.
@@ -280,9 +280,12 @@ Table~\ref{tab:local_errors_flights} - \textit{flights}, Table~\ref{tab:local_er
 \textbf{Distinct values:} 
 Scaling distinct values is more challenging. 
 Table~\ref{tab:dist_errors_tax} shows how the number of distinct values of each error type changes for different scaling factors.
-Typos, missing values and distincts are represented by estimated (\textit{Est}) and actual (\textit{Act}) number of distinct items.
+The number of distinct typos, distinct missing values and distinct items are represented by estimated (\textit{Est}) and actual (\textit{Act}) number of distinct values respectively.
 It is noticeable that typos are scaled according to the estimation.
-Missing values differ from estimation because the set of new distinct missing values, that can be added randomly, is limited. % and hard-coded.
+Missing values differ from estimation because the set of new distinct missing values, that can be added randomly, is limited.
+For example, infinity and Not a Number can be new distinct missing values that are added to the existing distinct set of missing values.
+It is not possible to define new distinct missing values since values that can be classified as missing values are fix.
+% and hard-coded.
 There is no estimation of distinct outlier values since the original outlier distribution is fully reused, and newly generated values are used instead of original. 
 Column \textit{Distinct} represents number of estimated and observed number of distinct values in the whole dataset.
 Since some errors are introduced at random, it is expected that estimation slightly differs from actual value. 
@@ -601,8 +604,9 @@ Figure~\ref{exp:per_difference_datasets} shows that mean, variance, min, and max
 In all figures, x-axis represents the scaling factor and y-axis is the percent difference of the original dirty and generated mean, variance, min, and max respectively.
 Figure~\ref{exp:per_difference_datasets} contains only plots of the statistics with percentage difference greater than \numprint{0}.
 The mean percentage difference is less than \numprint{1}\% for all datasets except \textit{movies}.
-Since the \textit{movies} dataset contains one fully missing column, as mentioned before, and the statistical properties are not preserved, mean of the \textit{movies} is infinity, similar min, max, and variance.
-The \textit{tax} dataset variance also differs from the original variance because introduced outlier values are significantly different from the clean dataset distinct values.
-The min and max plots are presented in Figure~\ref{exp:min_diff_per} and Figure~\ref{exp:max_diff_per} respectively.
+Since the \textit{movies} dataset contains one fully missing column, as mentioned before, and the statistical properties are not preserved.
+The \textit{tax} dataset variance also differs from the original variance because of the introduced outliers. 
+Outliers are significantly different from the clean dataset values.
+The min and max plots are shown in Figure~\ref{exp:min_diff_per} and Figure~\ref{exp:max_diff_per} respectively.
 Since outliers were added to \textit{tax}, min and max are different from original and are not within \numprint{5}\%.
 All above mentioned data characteristics are preserved (if possible) in both local and distributed data generators.

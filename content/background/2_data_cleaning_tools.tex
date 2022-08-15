@@ -6,13 +6,13 @@ A huge effort has been made in the research community to automate data cleaning 
 Many researchers have injected errors into the data with ground truth to experiment and evaluate their cleaning pipelines.
 In this section, existing frameworks, their differences, advantages, and disadvantages are discussed.
 % FDs, denial constraints: Any measurements where to introduce errors like HoloClean / Picket? Instead of just randomly.
-Error detection is typically limited to a specific problems (e.g., duplicates, integrity constraints violation), and data repairing methods are often not introducing correct repairs~\cite{RekatsinasCIR2017}.
+Error detection is typically limited to a specific problem (e.g., duplicates, integrity constraints violation), and data repairing methods are often not introducing correct repairs~\cite{RekatsinasCIR2017}.
 
 \textbf{HoloClean/HoloDetect:} 
 HoloClean~\cite{RekatsinasCIR2017} is a framework for holistic data repairing driven by probabilistic inference. The framework introduces an approach for combining heterogeneous data cleaning methods.
 It generates a probabilistic graphical model that uses input denial constraints and matching dependencies, capturing the uncertainty over observations in the input dataset. 
 Then, the probabilistic inference is used to reason about inconsistencies and repair them with most probable values. %likely values.
-HoloDetect~\cite{holodetect} is the follow up work. HoloDetect is a framework for the error detection.
+HoloDetect~\cite{HeidariMIR2019} is the follow up work. HoloDetect is a framework for the error detection.
 Correct and erroneous observations are generated with data augmentation and few-shot learning, and then used as input for a classifier to detect whether a value is an error.
 
 \textbf{Raha/Baran:} 
@@ -50,7 +50,7 @@ GouDa consists of two steps: data and error generation.
 Data generator (part of EvoBench project~\cite{evobench}) takes a schema and feature value ranges as an input and outputs purely synthetic dataset based on them. 
 Error generator introduces variety of error types at configurable error rate at a single value, attribute, tuple and several tuples levels.
 Since the data is fully synthetic and generator's inputs are schema and constraints, ground truth is provided. 
-Conversely to GouDa, BART~\cite{bart}, an error-generation tool for data cleaning applications, needs an existing dataset and inserts errors into the actual dataset that is assumed to be clean. It requires relational schema, user specify
+Conversely to GouDa, BART~\cite{bart}, an error-generation tool for data cleaning applications, needs an existing dataset and inserts errors into the actual dataset that is assumed to be clean. It requires relational schema, users specify
 a set of data quality rules as denial constraints~\cite{denialconst} (functional dependencies~\cite{BohannonFGJK2007,  QahtanTOCS2020}, conditional functional dependencies~\cite{FanGJK2008}, fixing rules~\cite{fixingrules}). 
 User can specify error rates but also how detectable and repairable introduced errors are given constraints.
 
@@ -61,7 +61,7 @@ User can specify error rates but also how detectable and repairable introduced e
 % - [ ] CleanML
 
 \textbf{Comparison of existing tools and the new data generator:} 
-Most of the mentioned above systems are not supporting distributed execution~\cite{raha, baran, RekatsinasCIR2017, holodetect, RestatGCS2022, jenga}, limiting the applicability to a single machine.
+Most of the mentioned above systems are not supporting distributed execution~\cite{raha, baran, RekatsinasCIR2017, HeidariMIR2019, RestatGCS2022, jenga}, limiting the applicability to a single machine.
 Another constraint in existing frameworks are hand-crafted rules/constraints or manual labeling (by users).
 Importantly, it is difficult to measure the accuracy of the above mentioned tools without ground truth and mostly existing frameworks use manually cleaned datasets, which is not feasible at scale.
 % Unknown ground truth and synthetically generated errors are the problem
