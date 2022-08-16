@@ -8,7 +8,7 @@ Once trivial sizes are exceeded, doubling data size leads to more than doubled e
 This indicates super linear scaling of the data generation and validation.
 It is assumed that the performance of the framework should be linear, but, according to the measured times, this is not the case for the error generation part of the framework.
 None of the operations used indicate super linear execution time.
-Only the swaps generation creates all-pairs of two filtered features, but swaps are present only in \textit{tax}.
+Only the swaps generation creates all-pairs of two filtered features, but swaps are present only in the \textit{tax}.
 A hypothesis could be that random memory access leads to frequent cache misses and cache evictions.
 % TODO data sizes 
 

@@ -6,7 +6,7 @@ Data engineers and data scientists in general spend between 80\% and 90\% of the
 % \textbf{Problems of dirty data:}
 % Dirty data refers to data that contains erroneous or missing information.
 Accordingly, data cleaning is a huge challenge in Databases (DB) and Machine Learning (ML) fields.
-Both communities have been working on solutions of problems related to dirty data~\cite{cleanml}. 
+Both communities have been working on solutions of problems related to dirty data~\cite{cleanml, HammerST05,HalevyKNOPRW16}. 
 The ML community concentrates on impact of dirty data and noise on ML models~\cite{cleanml}.
 It was studied that noise can have negligible or positive effort on accuracy~\cite{processingsys, outperformstudy} since noise can act as a regularizer, but ML models can also be sensitive to the dirty data, especially dirty labels~\cite{classificationnoisesurvey}.
 The DB community's focus is on error detection and repairing~\cite{Hellerstein08quantitativedata, duplicatesstudy}.
@@ -22,7 +22,7 @@ For evaluating data cleaning approaches the ground truth (GT) is required, unles
 GT is not always available and is time-consuming to collect or create.
 Sufficient data cleaning often requires an extra user input such as hand-crafted constraints~\cite{bart}.
 Additionally, many datasets are private or confidential. 
-Limited or even missing access to the raw data makes construction or acquisition of the ground truth extremely difficult. 
+Limited or even missing access to the raw data makes construction or acquisition of the ground truth extremely difficult or sometimes even impossible. 
 % raw data (as apposed to aggregates in federated learning)
 
 % While limited focus is made on scalable solutions that handle the cleaning of large datasets
@@ -30,8 +30,8 @@ Limited or even missing access to the raw data makes construction or acquisition
 \textbf{Data cleaning in ML pipelines}: 
 Data cleaning is essential for the performance of ML models or databases.
 It is part of the ML pipeline that aims to automate machine learning workflow. 
-ML pipeline consists of several steps: data collection~\cite{LiDLMS2015}, data cleaning~\cite{raha, baran, RekatsinasCIR2017, HeidariMIR2019, activeclean, alphaclean, cleanml}, feature extraction~\cite{ShahLKYK2021}, model training~\cite{RekatsinasCIR2017}, model debugging~\cite{SagadeevaB2021}, model evaluation~\cite{generalizing_confusion_matrix}, model visualization~\cite{NakandalaKP2019, CrottyGZBK2015, SimonyanVZ2013}, and model serving~\cite{OlstonFGHLLRR2017, Lee2018, WeiGZWCNOSR2018}.
-Data preparation is a key step and obeys the garbage in, garbage out principle (GIGO).
+ML pipeline consists of several steps: data collection~\cite{LiDLMS2015}, data cleaning~\cite{raha, baran, RekatsinasCIR2017, HeidariMIR2019, activeclean, alphaclean, cleanml, HammerST05}, feature extraction~\cite{ShahLKYK2021}, model training~\cite{RekatsinasCIR2017}, model debugging~\cite{SagadeevaB2021, autoweka, LiJDRT2017, KangRBZ2020, KandasamyNSPX2018}, model evaluation~\cite{generalizing_confusion_matrix, Ribeiro0G16}, model visualization~\cite{NakandalaKP2019, CrottyGZBK2015, SimonyanVZ2013}, and model serving~\cite{OlstonFGHLLRR2017, Lee2018, WeiGZWCNOSR2018}.
+Data preparation is a key step in ML pipeline and obeys the garbage in, garbage out principle (GIGO).
 GIGO is the concept that flawed input data produces nonsense output.
 
 % Idea (1) and Contributions 
@@ -49,7 +49,7 @@ The high level list of contributions is:
     % \item This paper, describing techniques and algorithms used.
 \end{itemize}
 
-Finally, this framework is a part of a larger project called WashHouse, a data cleaning for ML benchmark, that is designed to solve the problem of evaluating data cleaning approaches, and the problem of the missing ground truth datasets.
+Finally, this data generation framework is a part of a larger project called WashHouse, a data cleaning for ML benchmark, that is designed to solve the problem of evaluating data cleaning approaches, and the problem of the missing ground truth datasets.
 
 % WashHouse scales clean and dirty versions of the dataset, preserving data and error distributions. 
 % WashHouse extracts real error patterns from the dataset and scales data with configurable errors and error rates. 

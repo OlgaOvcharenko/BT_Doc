@@ -11,7 +11,7 @@ The \textit{tax} contains all 5 types of errors what leads to more complicated S
 Additionally, the runtime of tasks in central Spark jobs is highly skewed (seconds vs hours) leading to poor utilization of parallel resources.
 This leads to the performance that is worse by many orders of magnitude than expected.
 Also, the Spark Catalyst Optimizer tries to optimize the large sequences of instructions, this leads to long startup, compile and optimization times. 
-For instance, in scaling \textit{beers} to 2x the Spark context start up takes 25 seconds, data is scaled up (lazy evaluation) in 11 seconds, errors are saved to HDFS in 5 seconds, and new error distribution/statistics is computed in 11 seconds, and the result dataset is saved to HDFS in 25 seconds, plus various overheads of 7 seconds.
+For instance, in scaling the \textit{beers} dataset to 2x, the Spark context start up takes 25 seconds, data is scaled up (lazy evaluation) in 11 seconds, errors are saved to HDFS in 5 seconds, and new error distribution/statistics is computed in 11 seconds, and the result dataset is saved to HDFS in 25 seconds, plus various overheads of 7 seconds.
 According to the results, the proposed distributed data generator scales linearly.
 
 \textbf{Random error generation:} 

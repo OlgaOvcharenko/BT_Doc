@@ -33,11 +33,11 @@ Both \textit{flights} and \textit{hospital}, were obtained along with ground tru
 \textbf{Movies} is a dataset that is available in the Magellan repository~\cite{DasDGGKGP2016, KondaDSDABLPZNPKDR2016}.
 It was collected by web scraping Rotten Tomatoes~\footnote{\url{https://www.rottentomatoes.com/}} and IMBD~\footnote{\url{https://www.imdb.com/}}.
 The dataset describes movies, their casts and ratings. 
-Interestingly, one of the columns is \textsc{description} free text.
+Interestingly, one of the columns \textsc{description} is free text.
 
 \textbf{Rayyan} is also a real-world dataset. 
 It was cleaned by the owners~\cite{QuzzaniHFE2016} themselves, and is used in \textcite{MahdaviAFMQST2019, MahdaviA2020}.
-The dataset summarizes articles, as well as their characteristics such as publisher, volume, language.
+The dataset summarizes articles, as well as their characteristics such as publisher, volume, and language.
 
 \textbf{Tax} is a large synthetically created dataset from the BART~\cite{bart} repository.
 It summarizes information about tax payers and their personal information that is important for the tax estimation.
@@ -55,10 +55,10 @@ Similarly, maintenance of frequencies of distinct values allows one to preserve 
 
 \textbf{Error distribution: } 
 In Table~\ref{tab:dirty_num_errors}, the error distribution of the different datasets is presented. 
-Graphical representations of the errors include: The percentages of different error types in each dataset are shown in Figure~\ref{exp:errors_percent} and count - in Figure~\ref{exp:errors_count}.
+Graphical representations of the errors include: The percentages of different error types in each dataset, shown in Figure~\ref{exp:errors_percent}, and frequencies, shown in Figure~\ref{exp:errors_count}.
 In the \textit{beers} dataset only two types of errors are present: Typos and missing values. 
-Interestingly, one column \textsc{ounces} was classified as fully missing because it was transferred from integer to string, e.g. \textsc{12} is turned into \textsc{12 oz} or \textsc{12 ounce}, and there are many missing values in the \textsc{ibu} column.
-Then the \textit{flights} dataset contains the biggest count of typos over all  datasets. 
+Interestingly, one column \textsc{ounces} was classified as fully missing because it was transferred from integer to string, e.g. \textsc{12} was turned into \textsc{12 oz} or \textsc{12 ounce}, and there are many missing values in the \textsc{ibu} column.
+The \textit{flights} dataset contains the biggest count of typos over all  datasets. 
 Most of them are in \textsc{sched\_dep\_time} column, e.g. \textsc{6:55 a.m.} is replaced by \textsc{12/02/2011 6:55 a.m.}.
 The \textit{hospital} data has the smallest number of errors. 
 Typos are in the \textsc{address\_1} column, while missing values are present in \textsc{address\_1}, \textsc{address\_2}, \textsc{address\_3}.
@@ -101,12 +101,12 @@ tax                  & \numprint{0}        & \numprint{1367}  & \numprint{588}  
 \end{table}
 
 \textbf{Distinct values:} 
-Distinct values are also interesting in terms of data distribution, and errors impact the distinct items set.
+Distinct values are also interesting in terms of data distribution, since errors impact the distinct items set.
 Figure~\ref{exp:distinct_values_datasets} shows how the distinct value set in columns changes after error introduction. 
 The x-axis represents each feature of the dataset, while the y-axis is log-scaled and shows the number of distinct values. 
 The blue color represents clean data while the red color stands for dirty.
-It is noticeable that in \textit{beers}, as stated earlier, one column is treated as completely missing.
-On the other hand, in \textit{hospitals} and \textit{flights} the number of distinct items increases.
+It is noticeable that in the \textit{beers}, as stated earlier, one column is treated as completely missing.
+On the other hand, in the \textit{hospitals} and \textit{flights} the number of distinct items increases.
 This happens because of many typos in both datasets.
 
 \begin{figure}[!t]
@@ -282,13 +282,13 @@ Scaling distinct values is more challenging.
 Table~\ref{tab:dist_errors_tax} shows how the number of distinct values of each error type changes for different scaling factors.
 The number of distinct typos, distinct missing values and distinct items are represented by estimated (\textit{Est}) and actual (\textit{Act}) number of distinct values respectively.
 It is noticeable that typos are scaled according to the estimation.
-Missing values differ from estimation because the set of new distinct missing values, that can be added randomly, is limited.
+Missing values differ from the estimation because the set of new distinct missing values, that can be added randomly, is limited.
 For example, infinity and Not a Number can be new distinct missing values that are added to the existing distinct set of missing values.
 It is not possible to define new distinct missing values since values that can be classified as missing values are fix.
 % and hard-coded.
 There is no estimation of distinct outlier values since the original outlier distribution is fully reused, and newly generated values are used instead of original. 
 Column \textit{Distinct} represents number of estimated and observed number of distinct values in the whole dataset.
-Since some errors are introduced at random, it is expected that estimation slightly differs from actual value. 
+Since some errors are introduced at random, it is expected that estimation slightly differs from the actual value. 
 
 \newcolumntype{S}{>{\raggedleft\arraybackslash$}p{2.0cm}<{$}}
 
@@ -601,12 +601,12 @@ Since some errors are introduced at random, it is expected that estimation sligh
 \textbf{Statistics of generated dataset:} 
 After generation, statistics are expected to be within 5\% of original statistics.
 Figure~\ref{exp:per_difference_datasets} shows that mean, variance, min, and max are preserved.
-In all figures, x-axis represents the scaling factor and y-axis is the percent difference of the original dirty and generated mean, variance, min, and max respectively.
-Figure~\ref{exp:per_difference_datasets} contains only plots of the statistics with percentage difference greater than \numprint{0}.
+In all figures, x-axis represents the scaling factor and y-axis is the percentage difference of the original dirty and generated mean, variance, min, and max respectively.
+Figure~\ref{exp:per_difference_datasets} contains only plots of the statistics with percentage difference greater than \numprint{0} because y-axis is log-scaled.
 The mean percentage difference is less than \numprint{1}\% for all datasets except \textit{movies}.
 Since the \textit{movies} dataset contains one fully missing column, as mentioned before, and the statistical properties are not preserved.
 The \textit{tax} dataset variance also differs from the original variance because of the introduced outliers. 
-Outliers are significantly different from the clean dataset values.
+Outliers are values that significantly differ from the clean dataset values.
 The min and max plots are shown in Figure~\ref{exp:min_diff_per} and Figure~\ref{exp:max_diff_per} respectively.
-Since outliers were added to \textit{tax}, min and max are different from original and are not within \numprint{5}\%.
+Since outliers were added to the \textit{tax}, min and max are different from original and are not within \numprint{5}\%.
 All above mentioned data characteristics are preserved (if possible) in both local and distributed data generators.

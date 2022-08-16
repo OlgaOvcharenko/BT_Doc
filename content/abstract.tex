@@ -8,11 +8,11 @@ There is a lack of large real-world datasets with ground truth that can be used 
 The best existing solution is the generation of synthetic data, but it does not represent the real-world problems and errors.
 % Say why it is  an interesting problem
 It would be interesting and helpful for the community if one could cheaply generate new large datasets from small samples of dirty and clean data.
-Since any non-trivial data sizes lead to new challenges in both data cleaning and full ML pipelines.
+Since any non-trivial data sizes lead to new challenges in both data cleaning and full Machine Learning (ML) pipelines.
 % Say what your solution achieves (200 words)
 Hence, this work focuses on data generation, observations of the original clean and dirty data are used to scale up to arbitrary data sizes.
 The biggest scaling factor achieved is \numprint{65536}x, and the largest data size achieved was \numprint{18} GB.
-These results were achieved under the constraints of preserving data statistics and the error distribution, and new algorithms were applied.
+These results were achieved under the constraints of preserving data statistics and the error distribution of the original dirty dataset, and new algorithms were applied.
 The generator can run either locally, or distributed via Apache Spark.
 As expected, the local execution is faster up to 42x for small scaling factors, 
 while, on the other hand, when scaling to larger sizes the distributed execution shows better performance and scalability for data sizes that would not fit in single node memory.  % performs
@@ -20,7 +20,9 @@ while, on the other hand, when scaling to larger sizes the distributed execution
 % Starting out, i
 It was challenging to introduce errors preserving the characteristics of the original dataset, and to scale to arbitrary sizes. 
 % since such errors as e.g. outliers change the mean drastically.
-The proposed framework solves the problem of the large-scale data generation, and provides data generation for benchmarking cleaning for ML tools.
+The proposed framework solves the problem of the large-scale data generation, and provides data generation for benchmarking cleaning for ML.
+% tools.
+
 % cleaning for ML benchmarks by scaling data and its distribution.
 
 % The proposed framework solves problem of the large-scale data generation, and provides a solution for cleaning for ML benchmarks by scaling data and its distribution.
