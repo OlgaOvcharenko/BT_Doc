@@ -21,7 +21,7 @@ The dataset contains information about different beer sorts, respective bottles 
 \textbf{Flights} is a real-world dataset that originally was collected by \textcite{LiDLMS2015}. 
 It is used in many projects \cite{HeidariMIR2019, raha, LiDLMS2015}.
 This dataset contains information on arrival and departure of flights.
-The source of this dataset is \textcite{LiDLMS2015}.
+% The source of this dataset is \textcite{LiDLMS2015}.
 
 \textbf{Hospital} data is taken from US Department of Health \& Human Services~\footnote{\url{http://www.hospitalcompare.hhs.gov}}. 
 It is frequently used \cite{RestatGCS2022, ChuIP2013, DallachiesaEEEIOT2013, HeidariMIR2019,MahdaviAFMQST2019, MahdaviA2020, RekatsinasCIR2017}.
@@ -41,6 +41,7 @@ The dataset summarizes articles, as well as their characteristics such as publis
 
 \textbf{Tax} is a large synthetically created dataset from the BART~\cite{bart} repository.
 It summarizes information about tax payers and their personal information that is important for the tax estimation.
+Interestingly, \textit{tax} is the largest dataset, its clean and dirty versions are \numprint{14.6}\ MB each.
 
 \subsection{Data and Error Characteristics}
 \label{sec:data_characteristics}
@@ -65,11 +66,13 @@ Typos are in the \textsc{address\_1} column, while missing values are present in
 The \textit{movies} dataset contains the most text columns such as \textsc{name}, \textsc{description}, \textsc{director}, \textsc{creator}, \textsc{release\_date}, all of them contain typos. Additionally, in the column \textsc{rating\_count} \numprint{5737} values are missing.
 The \textit{tax} dataset contains all five error types. 
 Together with typos, missing values and replacements, there are outliers, e.g. \textsc{salary} of \numprint{100000000}, and swaps between \textsc{f\_name} \& \textsc{l\_name}, \textsc{salary} \& \textsc{rate}, and \textsc{l\_name} \& \textsc{city}. 
+There are \numprint{8} swapped values (\numprint{4} pairs) in total.
 In general, there are not many outliers detected.
 First, the chosen datasets contain mostly text features what means that there are no outliers in the columns.
 Second, for outlier detection only basic techniques such as IQR or by standard deviation were used. 
 This means that contextual and collective outliers are not detected, but they are treated as different error type, because all differences between clean and dirty datasets are classified as faulty cells.
-There are also not many swaps in the given data, although this is a common mistake in real-world datasets.
+There are also not many swaps in the given data.
+Although, this is a common mistake in real-world datasets.
 
 \begin{figure}[!t]
     \centering
@@ -566,6 +569,21 @@ Since some errors are introduced at random, it is expected that estimation sligh
 % \label{exp:max_difference_datasets}
 % \end{figure}
 
+\textbf{Statistics of generated dataset:} 
+After generation, statistics are expected to be within 5\% of original statistics.
+Figure~\ref{exp:per_difference_datasets} shows that mean, variance, min, and max are preserved.
+In all figures, x-axis represents the scaling factor and y-axis is the percentage difference of the original dirty and generated mean, variance, min, and max respectively.
+Figure~\ref{exp:per_difference_datasets} contains only plots of the statistics with percentage difference greater than \numprint{0} because y-axis is log-scaled.
+The mean percentage difference is less than \numprint{1}\% for all datasets except \textit{movies}.
+Since the \textit{movies} dataset contains one fully missing column, as mentioned before, and the statistical properties are not preserved.
+The \textit{tax} dataset variance also differs from the original variance because of the introduced outliers. 
+Outliers are values that significantly differ from the clean dataset values.
+The min and max plots are shown in Figure~\ref{exp:min_diff_per} and Figure~\ref{exp:max_diff_per} respectively.
+Since outliers were added to the \textit{tax}, min and max are different from original and are not within \numprint{5}\%.
+In some cases, original statistics are not maintained because of amount of errors and their nature, e.g., fully missing column.
+All above mentioned data characteristics are preserved (if possible) in both local and distributed data generators.
+
+
 \begin{figure}[!ht]
     \centering 
     \centering
@@ -596,17 +614,3 @@ Since some errors are introduced at random, it is expected that estimation sligh
 \caption{Statistics difference in percent scaling clean and dirty datasets}
 \label{exp:per_difference_datasets}
 \end{figure}
-
-
-\textbf{Statistics of generated dataset:} 
-After generation, statistics are expected to be within 5\% of original statistics.
-Figure~\ref{exp:per_difference_datasets} shows that mean, variance, min, and max are preserved.
-In all figures, x-axis represents the scaling factor and y-axis is the percentage difference of the original dirty and generated mean, variance, min, and max respectively.
-Figure~\ref{exp:per_difference_datasets} contains only plots of the statistics with percentage difference greater than \numprint{0} because y-axis is log-scaled.
-The mean percentage difference is less than \numprint{1}\% for all datasets except \textit{movies}.
-Since the \textit{movies} dataset contains one fully missing column, as mentioned before, and the statistical properties are not preserved.
-The \textit{tax} dataset variance also differs from the original variance because of the introduced outliers. 
-Outliers are values that significantly differ from the clean dataset values.
-The min and max plots are shown in Figure~\ref{exp:min_diff_per} and Figure~\ref{exp:max_diff_per} respectively.
-Since outliers were added to the \textit{tax}, min and max are different from original and are not within \numprint{5}\%.
-All above mentioned data characteristics are preserved (if possible) in both local and distributed data generators.
